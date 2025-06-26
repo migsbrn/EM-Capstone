@@ -1,0 +1,180 @@
+/* ComS.css */
+
+/* Keep main container background as specified in Assessments.css */
+.coms-container {
+  background-color: var(--container-bg-color); /* This will inherit from :root in Assessments.css */
+  padding: 30px;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* Styling for the new assessment type cards (Picture Story Assessment) */
+.coms-type-card {
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  text-align: center;
+  padding: 20px;
+  height: 350px;
+  width: auto;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.coms-type-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.coms-type-card-header {
+  font-weight: 700;
+  font-size: 18px;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+}
+
+.coms-type-card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.coms-illustration-placeholder {
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.coms-illustration-placeholder i {
+  font-size: 100px;
+  color: #666;
+}
+
+.coms-type-card-text {
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 0;
+  color: #555;
+}
+
+/* Styling for the results table */
+.coms-results-table-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.coms-results-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+  color: #333;
+}
+
+.coms-results-table th,
+.coms-results-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.coms-results-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #555;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.coms-results-table tbody tr:hover {
+  background-color: #f0f4f8;
+}
+
+.no-results-message {
+  text-align: center;
+  color: #777;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+/* Back button style */
+.coms-btn-back {
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  background-color: white; /* Changed to white */
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  left: 15px; /* Keep or adjust as needed for left alignment */
+  top: -10px; /* Adjusted top position to be closer to the top */
+}
+
+.coms-btn-back:hover {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 992px) {
+  .coms-type-card {
+    height: 320px;
+    margin: 8px;
+  }
+  .coms-illustration-placeholder {
+    width: 120px;
+    height: 120px;
+  }
+  .coms-illustration-placeholder i {
+    font-size: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .coms-type-card {
+    height: 300px;
+    padding: 15px;
+    margin: 5px;
+  }
+  .coms-type-card-header {
+    font-size: 16px;
+  }
+  .coms-illustration-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+  .coms-illustration-placeholder i {
+    font-size: 70px;
+  }
+  .coms-type-card-text {
+    font-size: 13px;
+  }
+  .coms-results-table th,
+  .coms-results-table td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .coms-btn-back {
+    padding: 8px 20px;
+    font-size: 14px;
+    left: 15px;
+    top: 45px; /* Adjusted top position for smaller screens */
+  }
+}

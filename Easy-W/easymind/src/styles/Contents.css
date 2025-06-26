@@ -1,0 +1,848 @@
+/* Define category colors as custom properties */
+:root {
+  --color-number-skills: #fde6ff; /* Light pink */
+  --color-self-help: #f0f3f6; /* Soft gray */
+  --color-pre-vocational-skills: #d6e8ed; /* Muted teal */
+  --color-social-skills: #e8e9f5; /* Pale lavender */
+  --color-functional-academics: #e6f0e8; /* Light green */
+  --color-communication-skills: #f0e8e8; /* Soft coral */
+  --color-number-skills-hover: #ebc1d9; /* Slightly darker for hover */
+  --color-self-help-hover: #e0e3e8; /* Slightly darker for hover */
+  --color-pre-vocational-skills-hover: #c1d8e2; /* Slightly darker for hover */
+  --color-social-skills-hover: #d3d4e8; /* Slightly darker for hover */
+  --color-functional-academics-hover: #d1e0d3; /* Slightly darker for hover */
+  --color-communication-skills-hover: #e0d3d3; /* Slightly darker for hover */
+}
+
+/* General container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f4f8ff;
+  font-family: "Montserrat", sans-serif;
+  padding: 20px;
+}
+
+/* Universal button style */
+.cl-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none; /* Base buttons have no border, specific styles will add it */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cl-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cl-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button styles */
+.cl-btn-add-material,
+.cl-btn-add-assessment {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ced4da;
+}
+
+.cl-btn-add-material:hover,
+.cl-btn-add-assessment:hover {
+  background-color: #f1f1f1;
+  border-color: #b0b0b0;
+}
+
+.questions-btn,
+.floating-questions-btn {
+  background-color: #1abc9c; /* Unchanged as per request focusing on red/green */
+  color: #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+.floating-questions-btn:hover,
+.questions-btn:hover {
+  background-color: #16a085; /* Unchanged */
+  transform: translateY(-4px);
+}
+
+.cl-btn-edit,
+.edit-btn {
+  background-color: #658ba2;
+  color: #fff;
+  border: 1px solid #658ba2;
+}
+
+.cl-btn-edit:hover,
+.edit-btn:hover {
+  background-color: #557791;
+  border-color: #557791;
+}
+
+.add-icon {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Previously GREEN buttons, now Solid #658ba2 */
+.submit-btn,
+.submit-quiz-btn,
+.check-btn,
+.confirm-btn {
+  background-color: #658ba2;
+  color: #fff;
+  border: 1px solid #658ba2;
+}
+
+.submit-btn:hover,
+.submit-quiz-btn:hover,
+.check-btn:hover,
+.confirm-btn:hover {
+  background-color: #557791;
+  border-color: #557791;
+}
+
+/* Specific styling for Add Question button in question card actions, now Solid #658ba2 */
+.question-card-actions .submit-btn {
+  background-color: #658ba2;
+  color: #fff;
+  border: 1px solid #658ba2;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.question-card-actions .submit-btn:hover {
+  background-color: #557791;
+  border-color: #557791;
+}
+
+/* Previously RED buttons, now Outline and Text #658ba2 */
+.cancel-btn,
+.clear-btn,
+.delete-btn {
+  background-color: #fff;
+  color: #658ba2;
+  border: 1px solid #658ba2;
+}
+
+.cancel-btn:hover,
+.clear-btn:hover,
+.delete-btn:hover {
+  background-color: #658ba2;
+  color: #fff;
+}
+
+/* This is the card's delete button, already matching "Outline and Text #658ba2" */
+.cl-btn-delete {
+  background-color: #fff;
+  color: #658ba2;
+  border: 1px solid #658ba2;
+}
+
+.cl-btn-delete:hover {
+  background-color: #658ba2;
+  color: #fff;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  box-shadow: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.close-modal:hover {
+  color: #658ba2;
+  transform: none;
+}
+
+.option-remove-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #333;
+  box-shadow: none;
+  padding: 0;
+}
+
+.option-remove-btn:hover {
+  color: #658ba2;
+  transform: none;
+}
+
+/* Button container for add and filter */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-select,
+.sort-select {
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  color: #333;
+  background-color: #fff;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23333" d="M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 00-1.414-1.414z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  cursor: pointer;
+  width: 150px;
+}
+
+.assessment-filter {
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  color: #333;
+  background-color: #fff;
+  cursor: default;
+  width: 150px;
+  text-align: center;
+}
+
+.filter-select:focus,
+.sort-select:focus,
+.assessment-filter:hover {
+  outline: none;
+  border-color: #b0b0b0;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal overlay for web version */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal content */
+.modal-content.material-form,
+.modal-content.assessment-form {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 950px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+/* Form-specific styles */
+.material-form,
+.assessment-form {
+  margin-top: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.form-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 10px;
+  display: block;
+  font-weight: 500;
+}
+
+.topic-input,
+.assessment-title-input,
+.assessment-description-input,
+.question-text-input,
+.correct-answer-input,
+.form-input,
+.form-select {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 12px 15px;
+  font-size: 1.05rem;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.topic-input:focus,
+.assessment-title-input:focus,
+.assessment-description-input:focus,
+.question-text-input:focus,
+.correct-answer-input:focus,
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #b0b0b0;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  color: #333;
+  width: 100%;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #b0b0b0;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.assessment-form-wrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Form header styles */
+.form-header {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header .assessment-title-input {
+  font-size: 1.75rem;
+  font-weight: 600;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 15px;
+}
+
+.form-header .assessment-description-input {
+  font-size: 1.1rem;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 15px;
+}
+
+.form-header .form-select {
+  margin-top: 10px;
+}
+
+/* Question card styles (Google Forms inspired) */
+.question-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.question-card-content {
+  display: flex;
+  gap: 20px;
+}
+
+.question-card-main {
+  flex: 1;
+}
+
+.question-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 150px;
+}
+
+.question-text-input {
+  font-size: 1.05rem;
+  margin-bottom: 15px;
+  border: none;
+  border-bottom: 1px solid #ced4da;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-indicator {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #666;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.option-input {
+  border: none;
+  border-bottom: 1px solid #ced4da;
+  padding: 10px 5px;
+  font-size: 1rem;
+  color: #333;
+  flex: 1;
+}
+
+.option-input:focus {
+  outline: none;
+  border-bottom: 2px solid #b0b0b0;
+}
+
+.add-option-btn {
+  background: none;
+  border: none;
+  color: #658ba2;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 8px 0;
+  text-align: left;
+}
+
+.add-option-btn:hover {
+  color: #557791;
+}
+
+.correct-answer-section {
+  margin-top: 15px;
+}
+
+.fill-in-the-blank-fill {
+  margin-top: 10px;
+}
+
+.question-type-select {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 10px 25px 10px 10px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23333" d="M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 00-1.414-1.414z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.question-type-select:focus {
+  outline: none;
+  border-color: #b0b0b0;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.question-actions-buttons .cl-btn {
+  padding: 8px 16px;
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal and form actions */
+.modal-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+/* --- Styles for form action buttons in Editc.jsx --- */
+.cl-btn-primary-form-action {
+  background-color: #658ba2;
+  color: #fff;
+  border: 1px solid #658ba2;
+}
+
+.cl-btn-primary-form-action:hover {
+  background-color: #557791;
+  border-color: #557791;
+}
+
+.cl-btn-secondary-form-action {
+  background-color: #fff;
+  color: #658ba2;
+  border: 1px solid #658ba2;
+}
+
+.cl-btn-secondary-form-action:hover {
+  background-color: #658ba2;
+  color: #fff;
+}
+
+/* Other modals */
+.questions-modal,
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  text-align: center;
+}
+
+.questions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.question-item-list {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.question-type-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Notification styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #658ba2;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1200;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* Content grid styles */
+.content-section {
+  margin-top: 30px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.cl-content-card {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Category-specific card colors */
+.cl-content-card.category-number-skills {
+  background-color: var(--color-number-skills);
+}
+.cl-content-card.category-number-skills:hover {
+  background-color: var(--color-number-skills-hover);
+}
+
+.cl-content-card.category-self-help {
+  background-color: var(--color-self-help);
+}
+.cl-content-card.category-self-help:hover {
+  background-color: var(--color-self-help-hover);
+}
+
+.cl-content-card.category-pre-vocational-skills {
+  background-color: var(--color-pre-vocational-skills);
+}
+.cl-content-card.category-pre-vocational-skills:hover {
+  background-color: var(--color-pre-vocational-skills-hover);
+}
+
+.cl-content-card.category-social-skills {
+  background-color: var(--color-social-skills);
+}
+.cl-content-card.category-social-skills:hover {
+  background-color: var(--color-social-skills-hover);
+}
+
+.cl-content-card.category-functional-academics {
+  background-color: var(--color-functional-academics);
+}
+.cl-content-card.category-functional-academics:hover {
+  background-color: var(--color-functional-academics-hover);
+}
+
+.cl-content-card.category-communication-skills {
+  background-color: var(--color-communication-skills);
+}
+.cl-content-card.category-communication-skills:hover {
+  background-color: var(--color-communication-skills-hover);
+}
+
+.cl-content-card:hover {
+  transform: translateY(-5px);
+}
+
+.cl-content-body {
+  margin-bottom: 10px;
+}
+
+.cl-content-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.cl-content-type {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 5px;
+  text-transform: lowercase;
+}
+
+.cl-content-info {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.cl-content-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .add-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cl-btn-add-material,
+  .cl-btn-add-assessment {
+    width: 100%;
+  }
+
+  .filter-container {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .filter-select,
+  .sort-select,
+  .assessment-filter {
+    width: 100%;
+  }
+
+  .modal-overlay {
+    display: none;
+  }
+
+  .modal-content.material-form,
+  .assessment-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .assessment-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+
+  .question-card-content {
+    flex-direction: column;
+  }
+
+  .question-card-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .question-type-select,
+  .form-select {
+    width: 150px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .floating-questions-btn,
+  .questions-btn,
+  .submit-btn,
+  .submit-quiz-btn,
+  .cancel-btn {
+    width: 100%;
+    border-radius: 8px;
+    height: 40px;
+  }
+
+  .cl-btn-primary-form-action,
+  .cl-btn-secondary-form-action {
+    width: 100%;
+  }
+
+  .content-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .form-heading {
+    font-size: 1.2rem;
+  }
+
+  .topic-input,
+  .assessment-title-input,
+  .question-text-input,
+  .form-input,
+  .correct-answer-input,
+  .form-select,
+  .question-type-select {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  .option-input {
+    font-size: 0.9rem;
+    padding: 8px 0px;
+  }
+
+  .cl-content-title {
+    font-size: 1rem;
+  }
+
+  .content-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}

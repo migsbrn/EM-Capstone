@@ -1,0 +1,173 @@
+/* Header container */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--section-bg, #ffffff);
+  color: var(--text-color, rgb(0, 0, 0));
+  padding: 20px 15px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Admin panel title styling */
+.header-admin {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-right: -30px;
+}
+
+/* Navigation links container */
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Styling for each link in the header */
+.header-actions a {
+  color: var(--text-color, rgb(0, 0, 0));
+  font-size: 1.05em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 12px 20px;
+  border-radius: 10px;
+}
+
+.header-actions a:hover {
+  background-color: var(--hover-bg, #f1f1f1);
+}
+
+.header-actions a.active {
+  background-color: var(--active-bg, #cccccc);
+  font-weight: bold;
+}
+
+/* Profile section container */
+.profile-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* Profile image */
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Profile wrapper */
+.profile-wrapper {
+  position: relative;
+  margin-right: 50px;
+}
+
+/* Dropdown menu */
+.profile-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: var(--section-bg, #ffffff);
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 180px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Dropdown items */
+.dropdown-item {
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--text-color, #333);
+  font-size: 1em;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--hover-bg, #f0f0f0);
+}
+
+.logout-btn {
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  color: #f31d1d;
+}
+
+/* Prevent header from overlapping content */
+body {
+  margin-top: 100px;
+}
+
+/* Modal profile image */
+.modal-profile-image {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 3px solid var(--border-color, #eee);
+}
+
+/* Modal text layout */
+.modal-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Transparent button-like name and email */
+.profile-info-button {
+  background-color: transparent;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 1em;
+  color: var(--text-color, #333);
+  width: 100%;
+  max-width: 280px;
+  text-align: left;
+  font-weight: 500;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease;
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-info-button:hover {
+  background-color: var(--hover-bg, #f9f9f9);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide header during printing */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

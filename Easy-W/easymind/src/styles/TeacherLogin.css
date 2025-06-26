@@ -1,0 +1,376 @@
+/* TeacherLogin.css */
+.t-login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #a9c4c3;
+    font-family: Arial, sans-serif;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+
+  .t-illustration {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .t-illustration-image {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+  }
+
+  .t-login-form {
+    flex: 1;
+    background-color: white;
+    border-radius: 20px;
+    padding: 50px 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    margin-right: 15%;
+  }
+
+  .t-login-form h2 {
+    margin-bottom: 30px;
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .t-greeting-message {
+    text-align: center;
+    color: #3d5d53;
+    animation: t-fadeIn 0.5s ease-in-out;
+  }
+
+  .t-greeting-message h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .t-greeting-message p {
+    font-size: 18px;
+    color: #333;
+  }
+
+  @keyframes t-fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .t-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .t-input-group {
+    margin-bottom: 20px;
+  }
+
+  .t-input-group label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .t-input-group .t-asterisk {
+    color: red;
+    font-size: 18px;
+    vertical-align: top;
+  }
+
+  .t-input-group input,
+  .t-input-group select {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+    height: 40px;
+  }
+
+  .t-input-group input[type="file"] {
+    padding: 10px;
+    height: 40px;
+    line-height: normal;
+  }
+
+  .t-input-group select {
+    appearance: none;
+    background: white;
+    cursor: pointer;
+  }
+
+  .t-input-group select:invalid {
+    color: #999;
+  }
+
+  .t-input-group select option {
+    color: #333;
+  }
+
+  .t-input-group.t-full-width {
+    width: 100%;
+  }
+
+  .t-input-group.t-half-width {
+    flex: 0 0 48%;
+    width: 48%;
+  }
+
+  .t-address-group {
+    width: 100%;
+  }
+
+  .t-address-field {
+    margin-bottom: 20px;
+  }
+
+  .t-address-field label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .t-address-field .t-asterisk {
+    color: red;
+    font-size: 18px;
+    vertical-align: top;
+  }
+
+  .t-address-field input {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  .t-error {
+    color: red;
+    font-size: 14px;
+    margin: 5px 0;
+    text-align: left;
+  }
+
+  .t-login-button {
+    width: 100%;
+    background-color: #3d5d53;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .t-login-button:hover {
+    background-color: #324a44;
+  }
+
+  .t-login-button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  }
+
+  .t-google-login {
+    margin-top: 20px;
+  }
+
+  .t-google-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background-color: white;
+    color: #555;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .t-google-button:hover {
+    background-color: #f7f7f7;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .t-google-button:disabled {
+    background-color: #eee;
+    color: #aaa;
+    cursor: not-allowed;
+    border: 1px solid #ddd;
+  }
+
+  .t-google-logo {
+    width: 20px;
+    height: 20px;
+  }
+
+  .t-signup-login-toggle {
+    margin-top: 20px;
+  }
+
+  .t-signup-login-toggle p {
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* Sign-in specific styles */
+  form:not(:has(.t-address-group)) .t-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 10px;
+    height: 40px;
+    box-sizing: border-box;
+  }
+
+  form:not(:has(.t-address-group)) .t-input-group .t-icon {
+    margin-right: 10px;
+    color: #666;
+  }
+
+  form:not(:has(.t-address-group)) .t-input-group input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  form:not(:has(.t-address-group)) .t-input-group input::placeholder {
+    color: #999;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .t-login-container {
+      padding: 30px 20px;
+      gap: 30px;
+    }
+
+    .t-illustration-image {
+      max-width: 700px;
+    }
+
+    .t-login-form {
+      margin-right: 0;
+      padding: 40px 30px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .t-login-container {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .t-illustration-image {
+      max-width: 400px;
+    }
+
+    .t-login-form {
+      padding: 30px 20px;
+    }
+
+    .t-login-form h2 {
+      font-size: 30px;
+    }
+
+    .t-input-group input,
+    .t-input-group select {
+      font-size: 14px;
+    }
+
+    .t-login-button {
+      font-size: 16px;
+      padding: 12px;
+    }
+
+    .t-input-row {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .t-input-group.t-half-width {
+      flex: 1;
+      width: 100%;
+    }
+
+    .t-input-group.t-full-width {
+      width: 100%;
+    }
+
+    .t-greeting-message h2 {
+      font-size: 28px;
+    }
+
+    .t-greeting-message p {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .t-illustration-image {
+      max-width: 300px;
+    }
+
+    .t-login-form {
+      padding: 20px 15px;
+    }
+
+    .t-login-form h2 {
+      font-size: 26px;
+    }
+
+    .t-input-group input,
+    .t-input-group select {
+      font-size: 13px;
+    }
+
+    .t-login-button {
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .t-greeting-message h2 {
+      font-size: 24px;
+    }
+
+    .t-greeting-message p {
+      font-size: 14px;
+    }
+  }

@@ -1,0 +1,413 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f8ff;
+}
+
+.teacher-approval-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.teacher-approval-main {
+  background-color: #f4f8ff;
+  min-height: 100vh;
+  padding-top: 90px;
+  width: 100%;
+  max-width: 1300px;
+}
+
+.teacher-approval-content {
+  padding: 10px 20px;
+}
+
+.teacher-approval-header {
+  font-size: 2em;
+  color: #000000;
+  margin-bottom: 8px;
+  margin-left: -25px;
+}
+
+.teacher-approval-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  align-items: center;
+}
+
+.teacher-approval-controls input[type="text"] {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  font-size: 1em;
+  background-color: #fff;
+  width: 300px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.teacher-approval-controls input[type="text"]:focus {
+  outline: none;
+  border-color: #7f9b9a;
+  box-shadow: 0 0 0 3px rgba(127, 155, 154, 0.2);
+}
+
+.teacher-approval-controls select {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  font-size: 1em;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  appearance: none;
+  cursor: pointer;
+  width: 180px;
+}
+
+.teacher-approval-controls select:focus {
+  outline: none;
+  border-color: #7f9b9a;
+  box-shadow: 0 0 0 3px rgba(127, 155, 154, 0.2);
+}
+
+.history-button {
+  padding: 12px 16px;
+  background-color: #44c1bd;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.history-button:hover {
+  background-color: #6a8382;
+  transform: translateY(-1px);
+}
+
+.history-button:active {
+  transform: translateY(0);
+}
+
+.teacher-approval-table-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  margin-top: 40px;
+  width: 102%;
+  max-width: 102%;
+  margin-left: -30px;
+}
+
+.teacher-approval-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.teacher-approval-table th,
+.teacher-approval-table td {
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+.teacher-approval-table th {
+  background-color: #f3f6f9;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.teacher-approval-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.teacher-approval-table tbody tr:hover {
+  background-color: #eef4f3;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.teacher-approval-status-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.teacher-approval-table-container p {
+  margin-top: 20px;
+  font-style: italic;
+  color: #777;
+}
+
+@media screen and (max-width: 768px) {
+  .teacher-approval-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .teacher-approval-controls input,
+  .teacher-approval-controls select,
+  .teacher-approval-controls .history-button {
+    width: 100%;
+  }
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 0;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.history-modal-content {
+  max-width: 1000px; /* Increased from 900px */
+  width: 95%;
+  max-height: 85vh; /* Increased from 80vh */
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  background: #7f9b9a;
+  color: #ffffff;
+  padding: 15px 20px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  display: flex;
+  justify-content: center; /* Center the content */
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  position: sticky; /* Fix header at the top */
+  top: 0;
+  z-index: 1; /* Ensure header stays above content */
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 600;
+  text-align: center; /* Ensure text is centered */
+}
+
+.close-icon {
+  position: absolute;
+  right: 20px; /* Position the close icon on the right */
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-icon:hover {
+  color: #f0f0f0;
+}
+
+.modal-body {
+  padding: 25px; /* Increased padding for better spacing */
+  background-color: #fafafa; /* Light background for contrast */
+  flex: 1; /* Allow modal-body to take remaining space */
+  overflow-y: auto; /* Enable scrolling for the body content */
+}
+
+/* History Modal Specific Styling */
+.history-modal-content .modal-body {
+  padding: 20px 25px;
+}
+
+.history-table-wrapper {
+  max-height: 55vh; /* Increased from 50vh */
+  overflow-y: auto; /* Enable scrolling for the table */
+}
+
+.history-modal-content .teacher-approval-table {
+  width: 100%; /* Ensure table fits within the modal */
+}
+
+.history-modal-content .teacher-approval-table th,
+.history-modal-content .teacher-approval-table td {
+  padding: 12px 15px; /* Adjusted padding for better spacing */
+  font-size: 0.9em; /* Slightly smaller font for compactness */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+  max-width: 250px; /* Increased max-width to fit content better */
+  white-space: normal; /* Allow text wrapping to prevent horizontal scroll */
+  word-wrap: break-word; /* Ensure long words break */
+}
+
+.history-modal-content .teacher-approval-table th {
+  background-color: #e8f0ef; /* Lighter shade for history table header */
+  color: #2f4f4f; /* Darker text color for contrast */
+  font-weight: 600;
+  border-bottom: 2px solid #d3e0df; /* Thicker border for emphasis */
+  position: sticky; /* Fix table header */
+  top: 0; /* Stick to the top of the scrollable area */
+  z-index: 1; /* Ensure table header stays above table content */
+}
+
+.history-modal-content .teacher-approval-table tbody tr:nth-child(even) {
+  background-color: #f5f7f9; /* Slightly different shade for history table */
+}
+
+.history-modal-content .teacher-approval-table tbody tr:hover {
+  background-color: #e0e8e7; /* Softer hover color for history table */
+}
+
+/* Loading and No History States */
+.history-modal-content .modal-body p {
+  text-align: center;
+  font-size: 1em;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+  .history-modal-content {
+    width: 98%;
+    max-width: 98%;
+    max-height: 95vh; /* Increased from 90vh */
+  }
+
+  .history-modal-content .modal-body {
+    padding: 15px;
+  }
+
+  .history-table-wrapper {
+    max-height: 45vh; /* Increased from 40vh */
+  }
+
+  .history-modal-content .teacher-approval-table {
+    width: 100%; /* Ensure table fits on small screens */
+  }
+
+  .history-modal-content .teacher-approval-table th,
+  .history-modal-content .teacher-approval-table td {
+    padding: 8px 10px;
+    font-size: 0.85em;
+    max-width: 150px; /* Smaller max-width for mobile */
+  }
+
+  .modal-header h2 {
+    font-size: 1.2em;
+  }
+
+  .close-icon {
+    font-size: 1.2em;
+  }
+}
+
+.teacher-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-icon {
+  font-size: 1.2em;
+  color: #7f9b9a;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #333;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: #000000;
+  flex: 1;
+}
+
+.more-button {
+  padding: 6px 12px;
+  background-color: #44c1bd;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.more-button:hover {
+  background-color: #6a8382;
+  transform: translateY(-1px);
+}
+
+.more-button:active {
+  transform: translateY(0);
+}

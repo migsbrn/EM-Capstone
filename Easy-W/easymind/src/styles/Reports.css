@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Custom variables/overrides for Bootstrap if needed */
+:root {
+    --bs-primary: #7b68ee; /* MediumSlateBlue */
+    --bs-info: #4682b4; /* SteelBlue for total assessments */
+    --bs-success: #4caf50;
+    --bs-danger: #f44336;
+    --bs-warning: #ffa500; /* Orange for average score icon */
+    --bs-body-bg: #f8faff; /* Light background for the overall page */
+    --bs-body-color: #333333;
+    --bs-border-color: #e0e0e0;
+    --bs-font-sans-serif: 'Inter', sans-serif; /* Set Inter as default font */
+}
+
+body {
+    font-family: var(--bs-font-sans-serif);
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+.reports-container-bootstrap {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Header Adjustments */
+.header-controls-bootstrap .form-control,
+.header-controls-bootstrap .form-select {
+    min-width: 180px; /* Adjust as needed */
+    box-shadow: none !important; /* Remove Bootstrap's default focus shadow if desired */
+    border-color: var(--bs-border-color);
+    border-radius: 8px; /* Match image's rounded corners */
+}
+
+.header-search-input {
+    width: 220px; /* Specific width for search bar */
+}
+
+/* Custom styles for the top navigation (Reports, Student List, Assessments) */
+.nav-pills .nav-link {
+    background-color: transparent;
+    color: #666; /* Lighter text for inactive */
+    font-weight: 500;
+    border-radius: 0; /* Remove rounded corners */
+    padding: 8px 15px;
+}
+
+.nav-pills .nav-link.active {
+    background-color: transparent; /* No background */
+    color: var(--bs-primary); /* Primary color for active */
+    font-weight: 600;
+    border-bottom: 3px solid var(--bs-primary); /* Underline for active */
+}
+
+.nav-pills .nav-item:not(:last-child) .nav-link {
+    margin-right: 15px; /* Spacing between nav items */
+}
+
+.export-button-bootstrap {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    font-weight: 600;
+    border-radius: 8px; /* Match image's rounded corners */
+}
+.export-button-bootstrap:hover {
+    background-color: #6a5acd; /* Darker shade */
+    border-color: #6a5acd;
+}
+
+/* Summary Cards */
+.summary-card-bootstrap {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+
+.summary-card-bootstrap:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon-bootstrap {
+    font-size: 30px;
+    /* Colors applied via Bootstrap text-utility classes in JSX */
+}
+
+/* Chart Cards */
+.chart-card-bootstrap {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+}
+
+/* Student Table */
+.reports-student-table-bootstrap {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+}
+
+.nav-tabs .nav-link {
+    color: #666; /* Lighter gray for inactive tabs */
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--bs-primary);
+    border-color: transparent transparent var(--bs-primary) transparent;
+    background-color: transparent;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    color: var(--bs-primary);
+    border-color: transparent transparent var(--bs-gray-300) transparent;
+}
+
+.student-avatar-bootstrap {
+    width: 40px;
+    height: 40px;
+    background-color: #d1c4e9; /* Light purple for avatar */
+    color: var(--bs-primary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.attempts-count-bootstrap {
+    min-width: 90px; /* Ensure consistent width */
+    text-align: center;
+    background-color: #e8f5e9 !important; /* Light green for attempts badge */
+    color: var(--bs-success) !important;
+}
+
+.view-details-button-bootstrap {
+    font-weight: 600;
+    color: var(--bs-primary);
+    padding: 0; /* Remove default button padding */
+}
+
+.view-details-button-bootstrap:hover {
+    color: #5d4edc; /* Darker purple on hover */
+    background-color: transparent; /* Ensure no background changes on hover */
+}
+
+/* Custom progress bar fill for consistency */
+.progress-bar { /* Target Bootstrap's progress bar */
+    background-color: var(--bs-success); /* Green color */
+}
+
+/* Table styling for better visual match */
+.table thead th {
+    color: #999; /* Lighter color for table headers */
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.table tbody td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* Responsive adjustments for header controls */
+@media (max-width: 991.98px) { /* Medium devices and below */
+    .header-controls-bootstrap {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .header-controls-bootstrap .form-control,
+    .header-controls-bootstrap .form-select,
+    .export-button-bootstrap {
+        width: 100%;
+        min-width: unset;
+    }
+    .nav-pills {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 1rem; /* Add spacing below nav pills */
+    }
+    .nav-pills .nav-item:not(:last-child) .nav-link {
+        margin-right: 0; /* Remove right margin when stacked */
+    }
+}
+
+@media (max-width: 767.98px) { /* Small devices and below */
+    .reports-container-bootstrap {
+        padding: 15px;
+    }
+    .reports-header h1, .h4 {
+        font-size: 24px;
+    }
+    .summary-card-bootstrap .card-body {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .card-icon-bootstrap {
+        margin-bottom: 10px;
+        margin-right: 0 !important; /* Override Bootstrap's me-3 */
+    }
+    .table-responsive table {
+        font-size: 0.85rem;
+    }
+    .student-avatar-bootstrap {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
+    .attempts-count-bootstrap {
+        min-width: unset; /* Allow to shrink */
+        padding: 5px 8px;
+    }
+}
+
+@media (max-width: 575.98px) { /* Extra small devices */
+    .reports-container-bootstrap {
+        padding: 10px;
+    }
+    .nav-pills .nav-link {
+        padding: 8px 10px;
+    }
+}

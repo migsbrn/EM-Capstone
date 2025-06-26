@@ -1,0 +1,66 @@
+/* SocialS.css */
+
+.socials-container {
+  background-color: var(--container-bg-color); /* This will inherit from :root in Assessments.css */
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center; /* Center the content */
+  position: relative;
+}
+
+.socials-container h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.socials-container p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Back button style */
+.socials-btn-back {
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  background-color: white; /* Changed to white */
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  left: 15px; /* Keep or adjust as needed for left alignment */
+  top: -10px; /* Adjusted top position to be closer to the top */
+}
+
+.socials-btn-back:hover {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .socials-container h2 {
+    font-size: 24px;
+  }
+  .socials-container p {
+    font-size: 16px;
+  }
+  .socials-btn-back {
+    padding: 8px 20px;
+    font-size: 14px;
+    left: 15px;
+    top: 45px; /* Adjusted top position for smaller screens */
+  }
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .socials-btn-back {
+    left: 15px; /* Adjust for smaller screens */
+    top: 15px; /* Adjust for smaller screens */
+  }
+}

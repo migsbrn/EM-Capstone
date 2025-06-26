@@ -1,0 +1,180 @@
+/* FunctionalR.css */
+
+/* Keep main container background as specified in Assessments.css */
+.functional-r-container {
+  background-color: var(--container-bg-color); /* This will inherit from :root in Assessments.css */
+  padding: 30px;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* Styling for the new assessment type cards (Learn the Alphabet, etc.) */
+.functional-r-type-card {
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  text-align: center;
+  padding: 20px; /* Reduced padding slightly to accommodate margin */
+  height: 350px; /* Kept height consistent with Assessments.css */
+  width: auto; /* Let Bootstrap handle width */
+  margin: 10px; /* Added margin to create space between cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.functional-r-type-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.functional-r-type-card-header {
+  font-weight: 700;
+  font-size: 18px; /* Slightly smaller for these sub-category titles */
+  padding: 5px 10px;
+  margin-bottom: 15px;
+}
+
+.functional-r-type-card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.functional-r-illustration-placeholder {
+  width: 140px; /* Increased size for the illustration/icon area */
+  height: 140px; /* Increased size for the illustration/icon area */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.functional-r-illustration-placeholder i {
+  font-size: 100px; /* Further increased icon size */
+  color: #666; /* Default icon color */
+}
+
+.functional-r-type-card-text {
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 0;
+  color: #555;
+}
+
+/* Styling for the results table */
+.functional-r-results-table-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 20px;
+  max-height: 400px; /* Limit height for scrollability */
+  overflow-y: auto;
+}
+
+.functional-r-results-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0; /* Remove default table spacing */
+  font-size: 15px;
+  color: #333;
+}
+
+.functional-r-results-table th,
+.functional-r-results-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef; /* Light separator */
+}
+
+.functional-r-results-table th {
+  background-color: #f8f9fa; /* Light header background */
+  font-weight: 600;
+  color: #555;
+  position: sticky;
+  top: 0; /* Make headers sticky */
+  z-index: 1;
+}
+
+.functional-r-results-table tbody tr:hover {
+  background-color: #f0f4f8; /* Subtle hover effect on rows */
+}
+
+.no-results-message {
+  text-align: center;
+  color: #777;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+/* Back button style */
+.functional-r-btn-back {
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  background-color: white; /* Changed to white */
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  left: 15px; /* Keep or adjust as needed for left alignment */
+  top: -10px; /* Adjusted top position to be closer to the top */
+}
+
+.functional-r-btn-back:hover {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 992px) {
+  .functional-r-type-card {
+    height: 320px; /* Matched to Assessments.css .ass-card height for this breakpoint */
+    margin: 8px; /* Adjusted margin for responsiveness */
+  }
+  .functional-r-illustration-placeholder {
+    width: 120px;
+    height: 120px;
+  }
+  .functional-r-illustration-placeholder i {
+    font-size: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .functional-r-type-card {
+    height: 300px; /* Matched to Assessments.css .ass-card height for this breakpoint */
+    padding: 15px;
+    margin: 5px; /* Adjusted margin for responsiveness */
+  }
+  .functional-r-type-card-header {
+    font-size: 16px;
+  }
+  .functional-r-illustration-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+  .functional-r-illustration-placeholder i {
+    font-size: 70px;
+  }
+  .functional-r-type-card-text {
+    font-size: 13px;
+  }
+  .functional-r-results-table th,
+  .functional-r-results-table td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .functional-r-btn-back {
+    padding: 8px 20px;
+    font-size: 14px;
+    left: 15px;
+    top: 45px; /* Adjusted top position for smaller screens */
+  }
+}

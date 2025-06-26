@@ -1,0 +1,261 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #a9c4c3;
+  font-family: Arial, sans-serif;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.illustration {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.illustration-image {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+}
+
+.login-form {
+  flex: 1;
+  background-color: white;
+  border-radius: 20px;
+  padding: 50px 40px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  text-align: center;
+  margin-right: 15%;
+}
+
+.login-form h2 {
+  margin-bottom: 30px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+}
+
+.greeting-message {
+  text-align: center;
+  color: #3d5d53;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.greeting-message h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.greeting-message p {
+  font-size: 18px;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 10px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.input-group .icon {
+  margin-right: 10px;
+  color: #666;
+}
+
+.input-group input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.input-group input::placeholder {
+  color: #999;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin: 5px 0;
+  text-align: left;
+}
+
+.success {
+  color: green;
+  font-size: 14px;
+  margin: 5px 0;
+  text-align: left;
+}
+
+.login-button {
+  width: 100%;
+  background-color: #3d5d53;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #324a44;
+}
+
+.login-button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.google-login {
+  margin-top: 20px;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background-color: white;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.google-button:hover {
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.google-button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+  border: 1px solid #ddd;
+}
+
+.google-logo {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .login-container {
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .illustration-image {
+    max-width: 700px;
+  }
+
+  .login-form {
+    margin-right: 0;
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .illustration-image {
+    max-width: 400px;
+  }
+
+  .login-form {
+    padding: 30px 20px;
+  }
+
+  .login-form h2 {
+    font-size: 30px;
+  }
+
+  .input-group input {
+    font-size: 14px;
+  }
+
+  .login-button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .greeting-message h2 {
+    font-size: 28px;
+  }
+
+  .greeting-message p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .illustration-image {
+    max-width: 300px;
+  }
+
+  .login-form {
+    padding: 20px 15px;
+  }
+
+  .login-form h2 {
+    font-size: 26px;
+  }
+
+  .input-group input {
+    font-size: 13px;
+  }
+
+  .login-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .greeting-message h2 {
+    font-size: 24px;
+  }
+
+  .greeting-message p {
+    font-size: 14px;
+  }
+}

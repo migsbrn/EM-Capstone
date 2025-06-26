@@ -1,0 +1,173 @@
+/* Assessments.css */
+:root {
+  /* Original colors for functional academics, communication, pre-vocational, social skills */
+  --color-functional-academics: #e6f0e8; /* Light green from previous designs */
+  --color-functional-academics-hover: #d1e0d3;
+
+  --color-communication-skills: #f0e8e8; /* Soft coral from previous designs */
+  --color-communication-skills-hover: #e0d3d3;
+
+  --color-pre-vocational-skills: #d6e8ed; /* Muted teal from previous designs */
+  --color-pre-vocational-skills-hover: #c1d8e2;
+
+  --color-social-skills: #e8e9f5; /* Pale lavender from previous designs */
+  --color-social-skills-hover: #d3d4e8;
+
+  /* General background color for the container - UPDATED TO #F4F8FF */
+  --container-bg-color: #f4f8ff; /* New light blue/gray color */
+}
+
+.ass-assessment-scrollable { /* Kept for potential future use or if other parts of the app use it */
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.ass-assessment-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ass-assessment-scrollable::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.ass-assessment-scrollable::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.ass-assessment-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Updated .ass-card style to match the second image aesthetic */
+.ass-card {
+  border-radius: 15px; /* More rounded corners like in the second image */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  text-align: center;
+  padding: 20px;
+  height: 350px; /* Adjusted height to match the size perception in the image */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: none; /* No visible border for a softer look */
+  overflow: hidden; /* Ensure content within card is clipped if it overflows */
+  cursor: pointer; /* Indicate that cards are clickable */
+}
+
+.ass-card:hover {
+  transform: translateY(-8px); /* More pronounced lift on hover */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+.ass-card-header {
+  color: #333333; /* Darker text for readability */
+  font-weight: 700; /* Bolder font for headers */
+  font-size: 20px; /* Slightly smaller for card titles */
+  padding: 10px 15px;
+  border-top-left-radius: 10px; /* Match card border radius */
+  border-top-right-radius: 10px;
+}
+
+.ass-card-body {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center items horizontally */
+}
+
+/* Removed ass-card-footer as it's not used in category cards */
+/* .ass-card-footer { ... } */
+
+.ass-table { /* Kept for potential future use or if other parts of the app use it */
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.ass-table th { /* Kept for potential future use or if other parts of the app use it */
+  font-weight: 600;
+  color: #333;
+  background-color: #e9ecef;
+}
+
+.ass-table td { /* Kept for potential future use or if other parts of the app use it */
+  vertical-align: middle;
+  color: #555;
+}
+
+/* Updated .ass-btn-outline-primary for new card style, now used for "Back" buttons */
+.ass-btn-outline-primary {
+  border: 2px solid #6c757d; /* A subtle border for the button */
+  color: #6c757d; /* Text color for the button */
+  background-color: transparent;
+  padding: 10px 25px;
+  border-radius: 25px; /* Pill-shaped button */
+  font-weight: 600;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.ass-btn-outline-primary:hover {
+  background-color: #6c757d; /* Solid background on hover */
+  color: white;
+  border-color: #6c757d;
+}
+
+.ass-card-text {
+  margin-bottom: 20px; /* Spacing below description */
+  font-size: 16px;
+  color: #666; /* Softer text color for descriptions */
+  line-height: 1.5; /* Improve readability */
+}
+
+.category-icon-large {
+  font-size: 80px; /* Larger icons for prominence */
+  margin-bottom: 20px; /* More space below icon */
+  color: #555; /* Slightly softer color for icons */
+}
+
+.assessments-container {
+  background-color: var(--container-bg-color); /* Uses the new light blue/gray background */
+  padding: 20px;
+  padding-top: 80px; /* This is the key change: increased padding at the top */
+  border-radius: 10px;
+  /* Removed text-align: center; as it might misalign child components */
+}
+
+/* No specific .assessments-container p styling needed after content changes */
+/* .assessments-container p { ... } */
+
+@media (max-width: 992px) {
+  .ass-card {
+    height: 320px;
+  }
+  .category-icon-large {
+    font-size: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ass-card-body {
+    padding: 15px;
+  }
+
+  .ass-card-header {
+    padding: 10px;
+  }
+
+  .ass-card {
+    height: 300px;
+  }
+
+  .category-icon-large {
+    font-size: 60px;
+  }
+
+  .ass-btn-outline-primary {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}
