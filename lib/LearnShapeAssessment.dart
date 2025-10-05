@@ -333,7 +333,8 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
                           Navigator.pop(context);
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (_) => const Readingmaterialspage()),
+                                builder: (_) =>
+                                    const Readingmaterialspage()),
                             (Route<dynamic> route) => false,
                           );
                         },
@@ -363,6 +364,7 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
     );
   }
 
+  // ✅ UI
   @override
   Widget build(BuildContext context) {
     final questionData = questions[currentQuestion];
@@ -374,13 +376,13 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
         return false;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFEFE9D5),
+        backgroundColor: const Color(0xFFFFF6DC),
         body: SafeArea(
           child: Column(
             children: [
-              // Top Buttons Row (Close & Reset)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -388,33 +390,30 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
                       onPressed: _showSkipConfirmation,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF22223B),
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 36, vertical: 20),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text(
-                        "Close",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
+                      child: const Text("Close",
+                          style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                     const SizedBox(width: 16),
                     ElevatedButton(
                       onPressed: _resetAssessment,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5DB2FF),
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                        backgroundColor: const Color(0xFF4A4E69),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 36, vertical: 20),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text(
-                        "Reset",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
+                      child: const Text("Reset",
+                          style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                   ],
                 ),
               ),
-              // Main Content
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -465,8 +464,10 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
                                       : CustomPaint(
                                           size: const Size(250, 250),
                                           painter: DashedShapePainter(
-                                              questionData['matchWith']
-                                                  as String),
+                                              shape: questionData['matchWith']
+                                                  as String,
+                                              shapeSize: 150,
+                                              color: Colors.black54),
                                         ),
                                 );
                               },
@@ -474,7 +475,8 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
                             const SizedBox(height: 12),
                             Text("Attempts: $attempts/3",
                                 style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600)),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600)),
                           ],
                         ),
                       ),
@@ -486,12 +488,15 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
                           return Draggable<String>(
                             data: option['shape'],
                             feedback: Material(
+                              color: Colors.transparent,
                               child: Container(
                                 width: 120,
                                 height: 120,
                                 decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black26),
-                                    borderRadius: BorderRadius.circular(12)),
+                                    border:
+                                        Border.all(color: Colors.black26),
+                                    borderRadius:
+                                        BorderRadius.circular(12)),
                                 child: Image.asset(option['image']!,
                                     fit: BoxFit.contain),
                               ),
@@ -501,7 +506,8 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
                               height: 120,
                               decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black26),
-                                  borderRadius: BorderRadius.circular(12)),
+                                  borderRadius:
+                                      BorderRadius.circular(12)),
                               child: Image.asset(option['image']!,
                                   fit: BoxFit.contain),
                             ),
@@ -527,86 +533,100 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
   }
 }
 
-// Dashed Shape Painter
+// ✅ FIXED Dashed Shape Painter with Proper Star Shape
 class DashedShapePainter extends CustomPainter {
   final String shape;
-  DashedShapePainter(this.shape);
+  final double shapeSize;
+  final Color color;
+  final double dashWidth;
+  final double dashSpace;
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.black54
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+  DashedShapePainter({
+    required this.shape,
+    required this.shapeSize,
+    required this.color,
+    this.dashWidth = 10,
+    this.dashSpace = 5,
+  });
 
-    final dashWidth = 6.0;
-    final dashSpace = 4.0;
-    final path = Path();
-    final center = Offset(size.width / 2, size.height / 2);
-    const double shapeSize = 150.0;
-
-    if (shape == 'Circle') {
-      final rect = Rect.fromCircle(center: center, radius: shapeSize / 2);
-      _drawDashedCircle(canvas, rect, paint, dashWidth, dashSpace);
-    } else if (shape == 'Square') {
-      path.addRect(Rect.fromCenter(
-          center: center, width: shapeSize, height: shapeSize));
-      _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
-    } else if (shape == 'Triangle') {
-      path.moveTo(center.dx, center.dy - shapeSize / 2);
-      path.lineTo(center.dx - shapeSize / 2, center.dy + shapeSize / 2);
-      path.lineTo(center.dx + shapeSize / 2, center.dy + shapeSize / 2);
-      path.close();
-      _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
-    } else if (shape == 'Rectangle') {
-      path.addRect(Rect.fromCenter(
-          center: center, width: shapeSize * 1.5, height: shapeSize));
-      _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
-    } else if (shape == 'Star') {
-      for (int i = 0; i < 5; i++) {
-        final angle = (i * 4 * pi / 5) - pi / 2;
-        final outerX = center.dx + cos(angle) * (shapeSize / 2);
-        final outerY = center.dy + sin(angle) * (shapeSize / 2);
-        final innerAngle = angle + pi / 5;
-        final innerX = center.dx + cos(innerAngle) * (shapeSize / 4);
-        final innerY = center.dy + sin(innerAngle) * (shapeSize / 4);
-        if (i == 0) {
-          path.moveTo(outerX, outerY);
-        } else {
-          path.lineTo(outerX, outerY);
-        }
-        path.lineTo(innerX, innerY);
-      }
-      path.close();
-      _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
-    }
-  }
-
-  void _drawDashedCircle(
-      Canvas canvas, Rect rect, Paint paint, double dashWidth, double dashSpace) {
-    double circumference = 2 * pi * (rect.width / 2);
-    int dashCount = (circumference / (dashWidth + dashSpace)).floor();
-    for (int i = 0; i < dashCount; i++) {
-      final startAngle = (i * (dashWidth + dashSpace)) * 2 * pi / circumference;
-      final sweepAngle = dashWidth * 2 * pi / circumference;
-      canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
-    }
-  }
-
-  void _drawDashedPath(Canvas canvas, Path path, Paint paint, double dashWidth,
-      double dashSpace) {
-    final pathMetrics = path.computeMetrics();
-    for (final metric in pathMetrics) {
+  void _drawDashedPath(Canvas canvas, Path path, Paint paint,
+      double dashWidth, double dashSpace) {
+    for (final metric in path.computeMetrics()) {
       double distance = 0.0;
       while (distance < metric.length) {
-        final end = distance + dashWidth;
-        canvas.drawPath(metric.extractPath(distance, end), paint);
+        final nextDistance = distance + dashWidth;
+        final segment =
+            metric.extractPath(distance, nextDistance.clamp(0, metric.length));
+        canvas.drawPath(segment, paint);
         distance += dashWidth + dashSpace;
       }
     }
   }
 
+  void _drawDashedCircle(Canvas canvas, Rect rect, Paint paint,
+      double dashWidth, double dashSpace) {
+    final path = Path()..addOval(rect);
+    _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
+  }
+
   @override
-  bool shouldRepaint(covariant DashedShapePainter oldDelegate) =>
-      oldDelegate.shape != shape;
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final path = Path();
+
+    switch (shape) {
+      case 'Circle':
+        _drawDashedCircle(
+            canvas,
+            Rect.fromCircle(center: center, radius: shapeSize / 2),
+            paint,
+            dashWidth,
+            dashSpace);
+        break;
+      case 'Square':
+        path.addRect(Rect.fromCenter(
+            center: center, width: shapeSize, height: shapeSize));
+        _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
+        break;
+      case 'Triangle':
+        path.moveTo(center.dx, center.dy - shapeSize / 2);
+        path.lineTo(center.dx - shapeSize / 2, center.dy + shapeSize / 2);
+        path.lineTo(center.dx + shapeSize / 2, center.dy + shapeSize / 2);
+        path.close();
+        _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
+        break;
+      case 'Rectangle':
+        path.addRect(Rect.fromCenter(
+            center: center, width: shapeSize * 1.2, height: shapeSize * 0.7));
+        _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
+        break;
+      case 'Star':
+        const int numPoints = 5;
+        final outerRadius = shapeSize / 2;
+        final innerRadius = outerRadius / 2.5;
+        final angle = pi / numPoints;
+
+        for (int i = 0; i < numPoints * 2; i++) {
+          final radius = i.isEven ? outerRadius : innerRadius;
+          final x = center.dx + radius * cos(i * angle - pi / 2);
+          final y = center.dy + radius * sin(i * angle - pi / 2);
+          if (i == 0) {
+            path.moveTo(x, y);
+          } else {
+            path.lineTo(x, y);
+          }
+        }
+        path.close();
+        _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
+        break;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

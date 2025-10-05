@@ -150,19 +150,11 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  size: 60,
-                  color: Color(0xFFFF6B6B),
-                ),
+                const Icon(Icons.warning_amber_rounded, size: 60, color: Color(0xFFFF6B6B)),
                 const SizedBox(height: 20),
                 const Text(
                   "Skip Assessment?",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF22223B),
-                  ),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF22223B)),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 12),
@@ -181,17 +173,9 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF4A4E69),
                           padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
+                        child: const Text("Cancel", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
                     ),
                     const SizedBox(width: 20),
@@ -199,24 +183,14 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) => const LearnMyFamily()),
-                          );
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LearnMyFamily()));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFF6B6B),
                           padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
-                        child: const Text(
-                          "Skip",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
+                        child: const Text("Skip", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
                     ),
                   ],
@@ -245,11 +219,7 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
               blastDirectionality: BlastDirectionality.explosive,
               shouldLoop: false,
               numberOfParticles: 25,
-              colors: const [
-                Color(0xFF5DB2FF),
-                Color(0xFF4A4E69),
-                Color(0xFF22223B)
-              ],
+              colors: const [Color(0xFF5DB2FF), Color(0xFF4A4E69), Color(0xFF22223B)],
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -261,32 +231,11 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                     children: [
                       const Icon(Icons.star_rounded, size: 60, color: Color(0xFF5DB2FF)),
                       const SizedBox(height: 12),
-                      const Text(
-                        "Great Job!",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF22223B),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      const Text("Great Job!", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF22223B)), textAlign: TextAlign.center),
                       const SizedBox(height: 8),
-                      Text(
-                        "Your score: $score / ${questions.length}",
-                        style: const TextStyle(
-                            fontSize: 22, color: Color(0xFF4A4E69)),
-                        textAlign: TextAlign.center,
-                      ),
+                      Text("Your score: $score / ${questions.length}", style: const TextStyle(fontSize: 22, color: Color(0xFF4A4E69)), textAlign: TextAlign.center),
                       const SizedBox(height: 16),
-                      const Text(
-                        "Answer Summary",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF22223B),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      const Text("Answer Summary", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF22223B)), textAlign: TextAlign.center),
                       const SizedBox(height: 10),
                       ListView.builder(
                         shrinkWrap: true,
@@ -294,50 +243,23 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                         itemCount: reflection.length,
                         itemBuilder: (_, index) {
                           final item = reflection[index];
-                          final isCorrect =
-                              item['userAnswer'] == item['correctAnswer'];
+                          final isCorrect = item['userAnswer'] == item['correctAnswer'];
                           return Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            color: isCorrect
-                                ? const Color(0xFFD6FFE0)
-                                : const Color(0xFFFFD6D6),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            color: isCorrect ? const Color(0xFFD6FFE0) : const Color(0xFFFFD6D6),
                             margin: const EdgeInsets.symmetric(vertical: 6),
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundColor:
-                                    isCorrect ? Colors.green : Colors.red,
-                                child: Text(
-                                  "${index + 1}",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                backgroundColor: isCorrect ? Colors.green : Colors.red,
+                                child: Text("${index + 1}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                               ),
-                              title: Text(
-                                item['question']!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
+                              title: Text(item['question']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Your Answer: ${item['userAnswer']}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: isCorrect
-                                            ? Colors.green[800]
-                                            : Colors.red[800]),
-                                  ),
+                                  Text("Your Answer: ${item['userAnswer']}", style: TextStyle(fontSize: 16, color: isCorrect ? Colors.green[800] : Colors.red[800])),
                                   if (!isCorrect)
-                                    Text(
-                                      "Correct Answer: ${item['correctAnswer']}",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green),
-                                    ),
+                                    Text("Correct Answer: ${item['correctAnswer']}", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green)),
                                 ],
                               ),
                             ),
@@ -352,23 +274,15 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF5DB2FF),
                             padding: const EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           ),
                           onPressed: () {
                             Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (_) => const LearnMyFamily()),
+                              MaterialPageRoute(builder: (_) => const LearnMyFamily()),
                               (Route<dynamic> route) => false,
                             );
                           },
-                          child: const Text(
-                            "Back to Learning",
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
+                          child: const Text("Back to Learning", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
                         ),
                       ),
                     ],
@@ -392,44 +306,51 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
 
   @override
   Widget build(BuildContext context) {
+    final isSmall = MediaQuery.of(context).size.width < 600;
+
     return WillPopScope(
       onWillPop: () async {
         _showSkipConfirmation();
         return false;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFEFE9D5),
+        backgroundColor: const Color(0xFFFFF6DC),
         body: SafeArea(
           child: Column(
             children: [
+              // 🔹 Top Close & Reset Buttons
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
                       onPressed: _showSkipConfirmation,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4A4E69),
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: const Color(0xFF22223B),
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text("Close", style: TextStyle(fontSize: 20, color: Colors.white)),
+                      child: const Text("Close", style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                     const SizedBox(width: 16),
                     ElevatedButton(
                       onPressed: _resetAssessment,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5DB2FF),
-                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: const Color(0xFF4A4E69),
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text("Reset", style: TextStyle(fontSize: 20, color: Colors.white)),
+                      child: const Text("Reset", style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                   ],
                 ),
               ),
+              const Spacer(),
+
+              // 🔹 Question and options
               Expanded(
+                flex: 6,
                 child: AnimatedBuilder(
                   animation: _shakeController,
                   builder: (context, child) {
@@ -468,8 +389,9 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                         ...((questions[currentQuestion]['options'] as List<String>).map((option) {
                           Color bgColor = const Color(0xFF648BA2);
                           if (answered) {
-                            if (option == questions[currentQuestion]['answer']) bgColor = Colors.green;
-                            else if (option == selectedAnswer) bgColor = Colors.red;
+                            if (option == questions[currentQuestion]['answer']) {
+                              bgColor = Colors.green;
+                            } else if (option == selectedAnswer) bgColor = Colors.red;
                           }
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -500,6 +422,7 @@ class _MyFamilyAssessmentState extends State<MyFamilyAssessment>
                             ),
                           );
                         }).toList()),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),

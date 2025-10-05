@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'PictureStoryReading.dart';
-import 'SoftLoudSoundsPage.dart';
 import 'texttospeech.dart'; // TTS + STT file
 
 class CommunicationSkillsPage extends StatefulWidget {
@@ -71,12 +70,6 @@ class _CommunicationSkillsPageState extends State<CommunicationSkillsPage> {
                       'assets/story.png',
                       PictureStoryReading(),
                       "Picture Story Reading",
-                    ),
-                    _buildImageCard(
-                      context,
-                      'assets/Sounds.webp',
-                      SoftLoudSoundsPage(),
-                      "Soft & Loud Sounds",
                     ),
                     _buildImageCard(
                       context,

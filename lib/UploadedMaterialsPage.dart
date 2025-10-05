@@ -8,6 +8,10 @@ import 'package:open_file/open_file.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class UploadedMaterialsPage extends StatefulWidget {
+  const UploadedMaterialsPage({super.key});
+
+  const UploadedMaterialsPage({super.key});
+
   @override
   _UploadedMaterialsPageState createState() => _UploadedMaterialsPageState();
 }
@@ -52,7 +56,7 @@ class _UploadedMaterialsPageState extends State<UploadedMaterialsPage>
               setState(() {
                 materials =
                     querySnapshot.docs
-                        .map((doc) => doc.data() as Map<String, dynamic>)
+                        .map((doc) => doc.data())
                         .toList();
                 errorMessage =
                     _tabController.index == 0 && materials.isEmpty
@@ -92,7 +96,7 @@ class _UploadedMaterialsPageState extends State<UploadedMaterialsPage>
               setState(() {
                 assessments =
                     querySnapshot.docs
-                        .map((doc) => doc.data() as Map<String, dynamic>)
+                        .map((doc) => doc.data())
                         .toList();
                 errorMessage =
                     _tabController.index == 1 && assessments.isEmpty
@@ -121,14 +125,18 @@ class _UploadedMaterialsPageState extends State<UploadedMaterialsPage>
 
   IconData getFileIcon(String? fileType) {
     if (fileType == 'application/pdf') return Icons.picture_as_pdf;
-    if (fileType == 'application/vnd.ms-powerpoint' ||
+    if (fileType == 'application/vnd.ms-powerpoint' || {
         fileType ==
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation')
+    }
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
       return Icons.slideshow;
-    if (fileType == 'application/msword' ||
+    } {
+       (fileType == 'applicatio
+    }n/msword' ||
         fileType ==
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       return Icons.description;
+    }
     return Icons.insert_drive_file;
   }
 
@@ -428,11 +436,11 @@ class _UploadedMaterialsPageState extends State<UploadedMaterialsPage>
 
 class MaterialDetailPage extends StatefulWidget {
   final String fileName;
-  final String? fileType;
+  final String? fileType;super.key, 
   final String? fileData;
   final String topic;
 
-  const MaterialDetailPage({
+  const MaterialDetailPage({super.key, 
     required this.fileName,
     required this.fileType,
     required this.fileData,
@@ -554,16 +562,20 @@ class _MaterialDetailPageState extends State<MaterialDetailPage> {
     }
   }
 
-  IconData getFileIcon() {
-    if (widget.fileType == 'application/pdf') return Icons.picture_as_pdf;
+  IconData getFileIcon() { {
+       (widget.fileType == 'a
+    }pplication/pdf') return Icons.picture_as_pdf;
     if (widget.fileType == 'application/vnd.ms-powerpoint' ||
         widget.fileType ==
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation')
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation {
       return Icons.slideshow;
+    }
+    }
     if (widget.fileType == 'application/msword' ||
         widget.fileType ==
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       return Icons.description;
+    }
     return Icons.insert_drive_file;
   }
 
@@ -715,13 +727,13 @@ class _MaterialDetailPageState extends State<MaterialDetailPage> {
     super.dispose();
   }
 }
-
+super.key, 
 class AssessmentDetailPage extends StatefulWidget {
   final String title;
   final String category;
   final List<dynamic> questions;
 
-  const AssessmentDetailPage({
+  const AssessmentDetailPage({super.key, 
     required this.title,
     required this.category,
     required this.questions,

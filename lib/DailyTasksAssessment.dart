@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:video_player/video_player.dart';
 import 'package:confetti/confetti.dart';
+
 import 'ReadingMaterialsPage.dart';
 
 class DailyTasksAssessment extends StatefulWidget {
@@ -11,14 +12,20 @@ class DailyTasksAssessment extends StatefulWidget {
   State<DailyTasksAssessment> createState() => _DailyTasksAssessmentState();
 }
 
-class _DailyTasksAssessmentState extends State<DailyTasksAssessment> {
+class _DailyTasksAssessmentState extends State<DailyTasksAssessment>
+    with SingleTickerProviderStateMixin {
   final FlutterTts flutterTts = FlutterTts();
   late VideoPlayerController _videoController;
   late ConfettiController _confettiController;
+  late AnimationController _shakeController;
+
   int currentIndex = 0;
   int score = 0;
   List<Map<String, String>> reflections = [];
   String? selectedAnswer;
+
+  bool answered = false;
+  String? correctAnswer;
 
   final List<Map<String, dynamic>> questions = [
     {
@@ -50,16 +57,16 @@ class _DailyTasksAssessmentState extends State<DailyTasksAssessment> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(
-      duration: const Duration(seconds: 3),
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _shakeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
     );
     _initializeVideo();
   }
 
   void _initializeVideo() {
-    _videoController = VideoPlayerController.asset(
-        questions[currentIndex]['video'],
-      )
+    _videoController = VideoPlayerController.asset(questions[currentIndex]['video'])
       ..initialize().then((_) {
         setState(() {});
         _videoController.play();
@@ -80,285 +87,293 @@ class _DailyTasksAssessmentState extends State<DailyTasksAssessment> {
     await flutterTts.speak(option);
   }
 
-  void _checkAnswer() async {
-    if (selectedAnswer == null) return;
+  void _checkAnswer(String option) async {
+    if (answered) return;
 
-    final correctAnswer = questions[currentIndex]['answer'].toLowerCase();
+    setState(() {
+      selectedAnswer = option;
+      correctAnswer = questions[currentIndex]['answer'];
+      answered = true;
+    });
 
-    await flutterTts.stop();
-    if (selectedAnswer!.toLowerCase() == correctAnswer) {
+    if (option.toLowerCase() == correctAnswer!.toLowerCase()) {
       score++;
       await flutterTts.speak("Correct");
+      Future.delayed(const Duration(seconds: 1), _nextQuestion);
     } else {
       await flutterTts.speak("Wrong");
+      _shakeController.forward(from: 0);
+      Future.delayed(const Duration(seconds: 1), _nextQuestion);
     }
 
     reflections.add({
       'question': questions[currentIndex]['question'],
-      'userAnswer': selectedAnswer!,
-      'correctAnswer': correctAnswer,
+      'userAnswer': option,
+      'correctAnswer': correctAnswer!,
     });
+  }
 
-    await Future.delayed(const Duration(seconds: 2));
-
+  void _nextQuestion() {
     if (currentIndex < questions.length - 1) {
       setState(() {
         currentIndex++;
         selectedAnswer = null;
+        answered = false;
+        correctAnswer = null;
         _initializeVideo();
       });
     } else {
       _confettiController.play();
-      _showResultDialog();
+      _showCompletionDialog();
     }
   }
 
-  void _showResultDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder:
-          (_) => Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            backgroundColor: const Color(0xFFF7F9FC),
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                ConfettiWidget(
-                  confettiController: _confettiController,
-                  blastDirectionality: BlastDirectionality.explosive,
-                  shouldLoop: false,
-                  numberOfParticles: 25,
-                  colors: const [
-                    Colors.red,
-                    Colors.green,
-                    Colors.blue,
-                    Colors.orange,
-                    Colors.purple,
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 400),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.star_rounded,
-                            color: Colors.amber,
-                            size: 80,
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            "Great Job!",
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF2C3E50),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            "Your score: $score/${questions.length}",
-                            style: const TextStyle(
-                              fontSize: 22,
-                              color: Color(0xFF34495E),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Answer Summary",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: reflections.length,
-                            itemBuilder: (_, index) {
-                              final item = reflections[index];
-                              final isCorrect =
-                                  item['userAnswer'] == item['correctAnswer'];
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4.0,
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        isCorrect
-                                            ? Colors.green[50]
-                                            : Colors.red[50],
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color:
-                                          isCorrect ? Colors.green : Colors.red,
-                                    ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Q: ${item['question']}",
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Your Answer: ${item['userAnswer']}",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color:
-                                              isCorrect
-                                                  ? Colors.green
-                                                  : Colors.red,
-                                        ),
-                                      ),
-                                      if (!isCorrect)
-                                        Text(
-                                          "Correct Answer: ${item['correctAnswer']}",
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF5DB2FF),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 18,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                    builder:
-                                        (_) => const Readingmaterialspage(),
-                                  ),
-                                  (Route<dynamic> route) => false,
-                                );
-                              },
-                              child: const Text(
-                                "Back to Learning",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
+  void _resetAssessment() {
+    setState(() {
+      currentIndex = 0;
+      score = 0;
+      reflections.clear();
+      selectedAnswer = null;
+      answered = false;
+      correctAnswer = null;
+      _initializeVideo();
+    });
   }
 
   void _showSkipConfirmation() {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: const Text(
-              "Skip Assessment",
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            content: const Text(
-              "Are you sure you want to skip the assessment?",
-              style: TextStyle(fontSize: 22, color: Colors.black87),
-              textAlign: TextAlign.center,
-            ),
-            actionsPadding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 12,
-            ),
-            actions: [
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 0,
+      barrierDismissible: true,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        backgroundColor: const Color(0xFFFFF6DC),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.warning_amber_rounded,
+                    size: 60, color: Color(0xFFFF6B6B)),
+                const SizedBox(height: 20),
+                const Text(
+                  "Skip Assessment?",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF22223B),
                   ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 3,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (_) => const Readingmaterialspage(),
+                const SizedBox(height: 12),
+                const Text(
+                  "Are you sure you want to skip this assessment? Your progress will be saved.",
+                  style: TextStyle(fontSize: 18, color: Color(0xFF4A4E69)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4A4E69),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
                       ),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: const Text(
-                    "Yes, Skip",
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
                     ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF6B6B),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          "Skip",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showCompletionDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: const Color(0xFFFFF6DC),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              shouldLoop: false,
+              numberOfParticles: 25,
+              colors: const [Color(0xFF5DB2FF), Color(0xFF4A4E69), Color(0xFF22223B)],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 500, maxWidth: 400),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.star_rounded,
+                          size: 60, color: Color(0xFF5DB2FF)),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Great Job!",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF22223B),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Your score: $score / ${questions.length}",
+                        style: const TextStyle(
+                            fontSize: 22, color: Color(0xFF4A4E69)),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Answer Summary",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF22223B),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: reflections.length,
+                        itemBuilder: (_, index) {
+                          final item = reflections[index];
+                          final isCorrect =
+                              item['userAnswer'] == item['correctAnswer'];
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            color: isCorrect
+                                ? const Color(0xFFD6FFE0)
+                                : const Color(0xFFFFD6D6),
+                            margin: const EdgeInsets.symmetric(vertical: 6),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor:
+                                    isCorrect ? Colors.green : Colors.red,
+                                child: Text(
+                                  "${index + 1}",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              title: Text(
+                                "${item['question']}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Your Answer: ${item['userAnswer']}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: isCorrect
+                                            ? Colors.green[800]
+                                            : Colors.red[800]),
+                                  ),
+                                  if (!isCorrect)
+                                    Text(
+                                      "Correct Answer: ${item['correctAnswer']}",
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 70,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF5DB2FF),
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14)),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (_) => const Readingmaterialspage()),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: const Text(
+                            "Back to Learning",
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -367,7 +382,6 @@ class _DailyTasksAssessmentState extends State<DailyTasksAssessment> {
     final screenWidth = MediaQuery.of(context).size.width;
     final maxVideoWidth = screenWidth > 600 ? 600.0 : screenWidth * 0.9;
     final options = questions[currentIndex]['options'] as List<String>;
-    final isSmall = screenWidth < 600;
 
     return WillPopScope(
       onWillPop: () async {
@@ -375,141 +389,164 @@ class _DailyTasksAssessmentState extends State<DailyTasksAssessment> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF4EAD5),
+        backgroundColor: const Color(0xFFFFF6DC),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: ElevatedButton(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
                       onPressed: _showSkipConfirmation,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4A4E69),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 16,
-                        ),
+                        backgroundColor: const Color(0xFF22223B),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                            borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text(
-                        "Close",
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      child: const Text("Close",
+                          style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFCCE5FF),
-                        borderRadius: BorderRadius.circular(12),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: _resetAssessment,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4A4E69),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: Text(
-                        'Question ${currentIndex + 1} of ${questions.length}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF333333),
-                        ),
-                      ),
+                      child: const Text("Reset",
+                          style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    questions[currentIndex]['question'],
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  if (_videoController.value.isInitialized)
-                    Center(
-                      child: Container(
-                        width: maxVideoWidth,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Colors.black12,
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: AspectRatio(
-                          aspectRatio: _videoController.value.aspectRatio,
-                          child: VideoPlayer(_videoController),
-                        ),
-                      ),
-                    )
-                  else
-                    const Center(child: CircularProgressIndicator()),
-                  const SizedBox(height: 40),
-                  ...options.map(
-                    (option) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedAnswer = option;
-                          });
-                          _checkAnswer();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              selectedAnswer == option
-                                  ? Colors.orange[300]
-                                  : const Color(0xFF648BA2),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 20,
-                          ),
-                          shape: RoundedRectangleBorder(
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFCCE5FF),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          minimumSize: const Size(double.infinity, 70),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                option,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                          child: Text(
+                            'Question ${currentIndex + 1} of ${questions.length}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF333333),
                             ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.volume_up,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                              onPressed: () => _speakOption(option),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      Text(
+                        questions[currentIndex]['question'],
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      if (_videoController.value.isInitialized)
+                        Center(
+                          child: Container(
+                            width: maxVideoWidth,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.black12,
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: AspectRatio(
+                              aspectRatio: _videoController.value.aspectRatio,
+                              child: VideoPlayer(_videoController),
+                            ),
+                          ),
+                        )
+                      else
+                        const Center(child: CircularProgressIndicator()),
+                      const SizedBox(height: 40),
+                      ...options.map(
+                        (option) {
+                          Color bgColor = const Color(0xFF648BA2);
+                          if (answered) {
+                            if (option == selectedAnswer) {
+                              bgColor = (option == correctAnswer)
+                                  ? Colors.green
+                                  : Colors.red;
+                            }
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            child: AnimatedBuilder(
+                              animation: _shakeController,
+                              builder: (context, child) {
+                                double offset = 0;
+                                if (answered &&
+                                    selectedAnswer == option &&
+                                    selectedAnswer != correctAnswer) {
+                                  offset = 8 * (1 - _shakeController.value * 2);
+                                }
+                                return Transform.translate(
+                                  offset: Offset(offset, 0),
+                                  child: ElevatedButton(
+                                    onPressed: () => _checkAnswer(option),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: bgColor,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 20),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      minimumSize: const Size(double.infinity, 70),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            option,
+                                            style: const TextStyle(
+                                                fontSize: 20, color: Colors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.volume_up,
+                                              color: Colors.white, size: 28),
+                                          onPressed: () => _speakOption(option),
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -521,6 +558,7 @@ class _DailyTasksAssessmentState extends State<DailyTasksAssessment> {
     _videoController.dispose();
     flutterTts.stop();
     _confettiController.dispose();
+    _shakeController.dispose();
     super.dispose();
   }
 }

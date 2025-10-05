@@ -138,7 +138,7 @@ class _ColorAssessmentState extends State<ColorAssessment>
       setState(() {
         isSpeaking = true;
         questionRead = false;
-        this.selectedOption = selectedColor;
+        selectedOption = selectedColor;
         showAnswerFeedback = true;
       });
 
