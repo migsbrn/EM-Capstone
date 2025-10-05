@@ -1,8 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:confetti/confetti.dart';
 import '../ReadingMaterialsPage.dart';
-import 'dart:math';
 
 class LearnShapeAssessment extends StatefulWidget {
   const LearnShapeAssessment({super.key});
@@ -11,9 +11,11 @@ class LearnShapeAssessment extends StatefulWidget {
   _LearnShapeAssessmentState createState() => _LearnShapeAssessmentState();
 }
 
-class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
+class _LearnShapeAssessmentState extends State<LearnShapeAssessment>
+    with TickerProviderStateMixin {
   final FlutterTts flutterTts = FlutterTts();
   late ConfettiController _confettiController;
+
   int currentQuestion = 0;
   int score = 0;
   int attempts = 0;
@@ -82,7 +84,8 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 3));
     _initializeTts();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _speakQuestion();
@@ -99,7 +102,7 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
     await flutterTts.stop();
     if (currentQuestion < questions.length) {
       final question = questions[currentQuestion]['question'] as String;
-      await flutterTts.speak(question);
+      await flutterTts.speak("Question ${currentQuestion + 1}: $question");
     }
   }
 
@@ -113,7 +116,8 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
     await flutterTts.stop();
     setState(() {
       attempts++;
-      isCorrectShapeDropped = droppedShape == questions[currentQuestion]['answer'];
+      isCorrectShapeDropped =
+          droppedShape == questions[currentQuestion]['answer'];
       showIncorrectIcon = !isCorrectShapeDropped;
     });
 
@@ -121,15 +125,12 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
       score++;
       await flutterTts.speak("Correct");
       setState(() => isQuestionFinished = true);
-      _proceedToNextQuestion();
+      Future.delayed(const Duration(seconds: 1), _proceedToNextQuestion);
     } else {
       await flutterTts.speak("Incorrect. Try again.");
       if (attempts >= 3) {
         setState(() => isQuestionFinished = true);
-        _proceedToNextQuestion();
-      } else {
-        setState(() => isCorrectShapeDropped = false);
-        await _speakQuestion();
+        Future.delayed(const Duration(seconds: 1), _proceedToNextQuestion);
       }
     }
   }
@@ -178,48 +179,88 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
               confettiController: _confettiController,
               blastDirectionality: BlastDirectionality.explosive,
               shouldLoop: false,
-              colors: const [Color(0xFF5DB2FF), Color(0xFF4A4E69), Color(0xFF22223B)],
+              colors: const [
+                Color(0xFF5DB2FF),
+                Color(0xFF4A4E69),
+                Color(0xFF22223B)
+              ],
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.star_rounded, size: 80, color: Color(0xFF5DB2FF)),
+                  const Icon(Icons.star_rounded,
+                      size: 80, color: Color(0xFF5DB2FF)),
                   const SizedBox(height: 16),
                   const Text(
                     "Great Job!",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF22223B)),
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF22223B)),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     "Your score: $score / ${questions.length}",
-                    style: const TextStyle(fontSize: 22, color: Color(0xFF4A4E69)),
+                    style: const TextStyle(
+                        fontSize: 22, color: Color(0xFF4A4E69)),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 20),
+                  const Divider(color: Color(0xFF4A4E69)),
+                  const SizedBox(height: 12),
+                  Column(
+                    children: List.generate(questions.length, (index) {
+                      final q = questions[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Q${index + 1}: ${q['question']}",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Color(0xFF22223B))),
+                            Text("${q['answer']}",
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF5DB2FF))),
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF5DB2FF),
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    ),
                     onPressed: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (_) => Readingmaterialspage()),
+                        MaterialPageRoute(
+                            builder: (_) => const Readingmaterialspage()),
                         (Route<dynamic> route) => false,
                       );
                     },
-                    child: const Text("Back to Learning", style: TextStyle(fontSize: 20, color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5DB2FF),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 18),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                    child: const Text("Back to Learning",
+                        style: TextStyle(fontSize: 20, color: Colors.white)),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A4E69),
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    ),
                     onPressed: _resetAssessment,
-                    child: const Text("Reset Assessment", style: TextStyle(fontSize: 20, color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF22223B),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 18),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                    child: const Text("Reset Assessment",
+                        style: TextStyle(fontSize: 20, color: Colors.white)),
                   ),
                 ],
               ),
@@ -233,28 +274,91 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
   void _showSkipConfirmation() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      barrierDismissible: true,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         backgroundColor: const Color(0xFFFFF6DC),
-        title: const Text("Skip Assessment", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-        content: const Text("Are you sure you want to skip?", style: TextStyle(fontSize: 20)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel", style: TextStyle(color: Color(0xFF4A4E69), fontSize: 18)),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.warning_amber_rounded,
+                    size: 60, color: Color(0xFFFF6B6B)),
+                const SizedBox(height: 20),
+                const Text(
+                  "Skip Assessment?",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF22223B),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Are you sure you want to skip this assessment? Your progress will be saved.",
+                  style: TextStyle(fontSize: 18, color: Color(0xFF4A4E69)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4A4E69),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (_) => const Readingmaterialspage()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF6B6B),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          "Skip",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => Readingmaterialspage()),
-                (Route<dynamic> route) => false,
-              );
-            },
-            child: const Text("Yes, Skip", style: TextStyle(color: Colors.white, fontSize: 18)),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -272,103 +376,140 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
       child: Scaffold(
         backgroundColor: const Color(0xFFEFE9D5),
         body: SafeArea(
-          child: Stack(
+          child: Column(
             children: [
-              Positioned(
-                top: 24,
-                right: 24,
-                child: ElevatedButton(
-                  onPressed: _showSkipConfirmation,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4A4E69),
-                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text("Close", style: TextStyle(fontSize: 20, color: Colors.white)),
-                ),
-              ),
-              Positioned(
-                top: 24,
-                left: 24,
-                child: ElevatedButton(
-                  onPressed: _resetAssessment,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5DB2FF),
-                    padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text("Reset", style: TextStyle(fontSize: 20, color: Colors.white)),
+              // Top Buttons Row (Close & Reset)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _showSkipConfirmation,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF22223B),
+                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text(
+                        "Close",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: _resetAssessment,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5DB2FF),
+                        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text(
+                        "Reset",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // Main Content
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 80),
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(color: const Color(0xFFCCE5FF), borderRadius: BorderRadius.circular(12)),
-                        child: Text(
-                          'Question ${currentQuestion + 1} of ${questions.length}',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF333333)),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                              color: const Color(0xFFCCE5FF),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Text(
+                            'Question ${currentQuestion + 1} of ${questions.length}',
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF333333)),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(questionData['question'] as String, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600)),
-                          IconButton(icon: const Icon(Icons.volume_up), iconSize: 30, onPressed: _repeatQuestion),
-                          const SizedBox(height: 20),
-                          DragTarget<String>(
-  onAcceptWithDetails: (details) => _handleDrop(details.data),
-                            builder: (context, candidateData, rejectedData) {
-                              return SizedBox(
-                                width: 250,
-                                height: 250,
-                                child: isCorrectShapeDropped
-                                    ? Image.asset(
-                                        options.firstWhere((opt) => opt['shape'] == questionData['answer'])['image']!,
-                                        fit: BoxFit.contain,
-                                      )
-                                    : CustomPaint(size: const Size(250, 250), painter: DashedShapePainter(questionData['matchWith'] as String)),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          Text("Attempts: $attempts/3", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                        ],
+                      const SizedBox(height: 30),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(questionData['question'] as String,
+                                style: const TextStyle(
+                                    fontSize: 28, fontWeight: FontWeight.w600)),
+                            IconButton(
+                                icon: const Icon(Icons.volume_up),
+                                iconSize: 30,
+                                onPressed: _repeatQuestion),
+                            const SizedBox(height: 20),
+                            DragTarget<String>(
+                              onAcceptWithDetails: (details) =>
+                                  _handleDrop(details.data),
+                              builder: (context, candidateData, rejectedData) {
+                                return SizedBox(
+                                  width: 250,
+                                  height: 250,
+                                  child: isCorrectShapeDropped
+                                      ? Image.asset(
+                                          options.firstWhere((opt) =>
+                                                  opt['shape'] ==
+                                                  questionData['answer'])['image']!,
+                                          fit: BoxFit.contain,
+                                        )
+                                      : CustomPaint(
+                                          size: const Size(250, 250),
+                                          painter: DashedShapePainter(
+                                              questionData['matchWith']
+                                                  as String),
+                                        ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            Text("Attempts: $attempts/3",
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w600)),
+                          ],
+                        ),
                       ),
-                    ),
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: options.map((option) {
-                        return Draggable<String>(
-                          data: option['shape'],
-                          feedback: Material(
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: options.map((option) {
+                          return Draggable<String>(
+                            data: option['shape'],
+                            feedback: Material(
+                              child: Container(
+                                width: 120,
+                                height: 120,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black26),
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: Image.asset(option['image']!,
+                                    fit: BoxFit.contain),
+                              ),
+                            ),
                             child: Container(
                               width: 120,
                               height: 120,
-                              decoration: BoxDecoration(border: Border.all(color: Colors.black26), borderRadius: BorderRadius.circular(12)),
-                              child: Image.asset(option['image']!, fit: BoxFit.contain),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black26),
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Image.asset(option['image']!,
+                                  fit: BoxFit.contain),
                             ),
-                          ),
-                          child: Container(
-                            width: 120,
-                            height: 120,
-                            decoration: BoxDecoration(border: Border.all(color: Colors.black26), borderRadius: BorderRadius.circular(12)),
-                            child: Image.asset(option['image']!, fit: BoxFit.contain),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -386,6 +527,7 @@ class _LearnShapeAssessmentState extends State<LearnShapeAssessment> {
   }
 }
 
+// Dashed Shape Painter
 class DashedShapePainter extends CustomPainter {
   final String shape;
   DashedShapePainter(this.shape);
@@ -407,8 +549,8 @@ class DashedShapePainter extends CustomPainter {
       final rect = Rect.fromCircle(center: center, radius: shapeSize / 2);
       _drawDashedCircle(canvas, rect, paint, dashWidth, dashSpace);
     } else if (shape == 'Square') {
-      final halfSize = shapeSize / 2;
-      path.addRect(Rect.fromCenter(center: center, width: shapeSize, height: shapeSize));
+      path.addRect(Rect.fromCenter(
+          center: center, width: shapeSize, height: shapeSize));
       _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
     } else if (shape == 'Triangle') {
       path.moveTo(center.dx, center.dy - shapeSize / 2);
@@ -417,7 +559,8 @@ class DashedShapePainter extends CustomPainter {
       path.close();
       _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
     } else if (shape == 'Rectangle') {
-      path.addRect(Rect.fromCenter(center: center, width: shapeSize * 1.5, height: shapeSize));
+      path.addRect(Rect.fromCenter(
+          center: center, width: shapeSize * 1.5, height: shapeSize));
       _drawDashedPath(canvas, path, paint, dashWidth, dashSpace);
     } else if (shape == 'Star') {
       for (int i = 0; i < 5; i++) {
@@ -439,7 +582,8 @@ class DashedShapePainter extends CustomPainter {
     }
   }
 
-  void _drawDashedCircle(Canvas canvas, Rect rect, Paint paint, double dashWidth, double dashSpace) {
+  void _drawDashedCircle(
+      Canvas canvas, Rect rect, Paint paint, double dashWidth, double dashSpace) {
     double circumference = 2 * pi * (rect.width / 2);
     int dashCount = (circumference / (dashWidth + dashSpace)).floor();
     for (int i = 0; i < dashCount; i++) {
@@ -449,7 +593,8 @@ class DashedShapePainter extends CustomPainter {
     }
   }
 
-  void _drawDashedPath(Canvas canvas, Path path, Paint paint, double dashWidth, double dashSpace) {
+  void _drawDashedPath(Canvas canvas, Path path, Paint paint, double dashWidth,
+      double dashSpace) {
     final pathMetrics = path.computeMetrics();
     for (final metric in pathMetrics) {
       double distance = 0.0;
@@ -462,5 +607,6 @@ class DashedShapePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant DashedShapePainter oldDelegate) => oldDelegate.shape != shape;
+  bool shouldRepaint(covariant DashedShapePainter oldDelegate) =>
+      oldDelegate.shape != shape;
 }

@@ -10,16 +10,15 @@ class RhymeAssessment extends StatefulWidget {
   _RhymeAssessmentState createState() => _RhymeAssessmentState();
 }
 
-class _RhymeAssessmentState extends State<RhymeAssessment>
-    with TickerProviderStateMixin {
+class _RhymeAssessmentState extends State<RhymeAssessment> with TickerProviderStateMixin {
   final FlutterTts flutterTts = FlutterTts();
   int currentQuestion = 0;
   int score = 0;
   String? selectedOption;
   bool isOptionDisabled = false;
+  Color borderColor = const Color(0xFF648BA2);
 
   late AnimationController _shakeController;
-  Color borderColor = const Color(0xFF648BA2);
 
   final List<Map<String, Object>> questions = [
     {
@@ -39,14 +38,13 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
     },
   ];
 
-  List<Map<String, String>> reflection = [];
+  final List<Map<String, String>> reflection = [];
 
   @override
   void initState() {
     super.initState();
     _configureTts();
     _speakQuestion();
-
     _shakeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -138,8 +136,7 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.warning_amber_rounded,
-                    size: 60, color: Color(0xFFFF6B6B)),
+                const Icon(Icons.warning_amber_rounded, size: 60, color: Color(0xFFFF6B6B)),
                 const SizedBox(height: 20),
                 const Text(
                   "Skip Assessment?",
@@ -172,10 +169,7 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
                         ),
                         child: const Text(
                           "Cancel",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
                     ),
@@ -195,10 +189,7 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
                         ),
                         child: const Text(
                           "Skip",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
                     ),
@@ -222,116 +213,93 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
         backgroundColor: const Color(0xFFFFF6DC),
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.star_rounded, size: 60, color: Color(0xFF5DB2FF)),
-              const SizedBox(height: 12),
-              const Text(
-                "Great Job!",
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF22223B)),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "Your score: $score / ${questions.length}",
-                style:
-                    const TextStyle(fontSize: 22, color: Color(0xFF4A4E69)),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "Answer Summary",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF22223B),
-                ),
-              ),
-              const SizedBox(height: 10),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 250),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: reflection.length,
-                  itemBuilder: (_, index) {
-                    final item = reflection[index];
-                    final isCorrect =
-                        item['userAnswer'] == item['correctAnswer'];
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      color: isCorrect
-                          ? const Color(0xFFD6FFE0)
-                          : const Color(0xFFFFD6D6),
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Q${index + 1}: ${item['question']}",
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF22223B)),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Your Answer: ${item['userAnswer']}",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  color: isCorrect
-                                      ? Colors.green[800]
-                                      : Colors.red[800]),
-                            ),
-                            if (!isCorrect)
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 500, maxWidth: 400),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.star_rounded, size: 60, color: Color(0xFF5DB2FF)),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Great Job!",
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF22223B)),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Your score: $score / ${questions.length}",
+                    style: const TextStyle(fontSize: 22, color: Color(0xFF4A4E69)),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Answer Summary",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF22223B)),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: reflection.length,
+                    itemBuilder: (_, index) {
+                      final item = reflection[index];
+                      final isCorrect = item['userAnswer'] == item['correctAnswer'];
+                      return Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        color: isCorrect ? const Color(0xFFD6FFE0) : const Color(0xFFFFD6D6),
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
-                                "Correct Answer: ${item['correctAnswer']}",
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green),
+                                "Q${index + 1}: ${item['question']}",
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF22223B)),
                               ),
-                          ],
+                              const SizedBox(height: 6),
+                              Text(
+                                "Your Answer: ${item['userAnswer']}",
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: isCorrect ? Colors.green[800] : Colors.red[800]),
+                              ),
+                              if (!isCorrect)
+                                Text(
+                                  "Correct Answer: ${item['correctAnswer']}",
+                                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.green),
+                                ),
+                            ],
+                          ),
                         ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 70,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5DB2FF),
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 70,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5DB2FF),
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (_) => const Readingmaterialspage()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: const Text(
+                        "Back to Learning",
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (_) => const Readingmaterialspage()),
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                  child: const Text(
-                    "Back to Learning",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -342,9 +310,7 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
     bool isSelected = selectedOption == option;
     Color targetColor = const Color(0xFF648BA2);
 
-    if (isSelected) {
-      targetColor = borderColor; // green or red
-    }
+    if (isSelected) targetColor = borderColor;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -352,45 +318,30 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
         animation: _shakeController,
         builder: (context, child) {
           double offset = 0;
-          if (!(_shakeController.isDismissed) &&
-              isSelected &&
-              borderColor == Colors.red) {
+          if (!(_shakeController.isDismissed) && isSelected && borderColor == Colors.red) {
             offset = sin(_shakeController.value * pi * 10) * 8;
           }
-          return Transform.translate(
-            offset: Offset(offset, 0),
-            child: child,
-          );
+          return Transform.translate(offset: Offset(offset, 0), child: child);
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
-          decoration: BoxDecoration(
-            color: targetColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: targetColor, borderRadius: BorderRadius.circular(12)),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: isOptionDisabled ? null : () => answerQuestion(option),
               borderRadius: BorderRadius.circular(12),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(
-                        option,
-                        style: const TextStyle(
-                            fontSize: 20, color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
+                      child: Text(option, style: const TextStyle(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.volume_up,
-                          color: Colors.white, size: 28),
+                      icon: const Icon(Icons.volume_up, color: Colors.white, size: 28),
                       onPressed: () => _speakOption(option),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -421,8 +372,7 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
           child: Column(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -430,26 +380,20 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
                       onPressed: _showSkipConfirmation,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF22223B),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 36, vertical: 20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14)),
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text("Close",
-                          style: TextStyle(fontSize: 24, color: Colors.white)),
+                      child: const Text("Close", style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                     const SizedBox(width: 16),
                     ElevatedButton(
                       onPressed: _resetAssessment,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF4A4E69),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 36, vertical: 20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14)),
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 20),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: const Text("Reset",
-                          style: TextStyle(fontSize: 24, color: Colors.white)),
+                      child: const Text("Reset", style: TextStyle(fontSize: 24, color: Colors.white)),
                     ),
                   ],
                 ),
@@ -459,22 +403,12 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   children: [
-                    Text(
-                      'Question ${currentQuestion + 1} of ${questions.length}',
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF22223B)),
-                    ),
+                    Text('Question ${currentQuestion + 1} of ${questions.length}',
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF22223B))),
                     const SizedBox(height: 12),
-                    Text(
-                      questionData['question'] as String,
-                      style: const TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87),
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(questionData['question'] as String,
+                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black87),
+                        textAlign: TextAlign.center),
                     const SizedBox(height: 12),
                     ...options.map(_buildOption),
                   ],
@@ -486,5 +420,12 @@ class _RhymeAssessmentState extends State<RhymeAssessment>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    flutterTts.stop();
+    _shakeController.dispose();
+    super.dispose();
   }
 }

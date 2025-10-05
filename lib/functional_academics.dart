@@ -4,7 +4,7 @@ import 'RhymeAndRead.dart';
 import 'LearnColors.dart';
 import 'LearnShapes.dart';
 import 'LearnMyFamily.dart'; // ✅ Import the My Family module
-import 'package:flutter_tts/flutter_tts.dart'; // Add TTS package
+import 'package:flutter_tts/flutter_tts.dart'; // TTS package
 
 class FunctionalAcademicsPage extends StatefulWidget {
   const FunctionalAcademicsPage({super.key});
@@ -27,24 +27,22 @@ class _FunctionalAcademicsPageState extends State<FunctionalAcademicsPage> {
   Future<void> _setupTTS() async {
     try {
       await flutterTts.setLanguage("en-US");
-      await flutterTts.setSpeechRate(0.5); // Slower speech rate for clarity
+      await flutterTts.setSpeechRate(0.5); // Slower speech rate
       await flutterTts.setPitch(1.0); // Normal pitch
       await flutterTts.setVolume(1.0); // Full volume
     } catch (e) {
-      print("TTS setup error: $e"); // Log error for debugging
+      print("TTS setup error: $e");
     }
   }
 
   Future<void> _speakIntro(String module) async {
-    if (_isDisposed) return; // Prevent calls after disposal
+    if (_isDisposed) return;
     try {
-      await flutterTts.stop(); // Stop any previous speech
+      await flutterTts.stop();
       await flutterTts.speak("Let's learn the $module");
-      await flutterTts.awaitSpeakCompletion(
-        true,
-      ); // Wait for speech to complete
+      await flutterTts.awaitSpeakCompletion(true);
     } catch (e) {
-      print("TTS speak error: $e"); // Log error for debugging
+      print("TTS speak error: $e");
     }
   }
 
@@ -106,32 +104,32 @@ class _FunctionalAcademicsPageState extends State<FunctionalAcademicsPage> {
                       context,
                       'assets/alphabet.png',
                       LearnTheAlphabets(),
-                      "alphabet", // Module name for TTS
+                      "alphabet",
                     ),
                     _buildImageCard(
                       context,
                       'assets/rhyme.png',
                       RhymeAndRead(),
-                      "rhyme and read", // Module name for TTS
+                      "rhyme and read",
                     ),
                     _buildImageCard(
                       context,
                       'assets/color.png',
                       LearnColors(),
-                      "colors", // Module name for TTS
+                      "colors",
                     ),
                     _buildImageCard(
                       context,
                       'assets/shape.png',
                       LearnShapes(),
-                      "shapes", // Module name for TTS
+                      "shapes",
                     ),
                     _buildImageCard(
                       context,
-                      'assets/family_card.png',
+                      '', // ❌ Empty string to simulate no cover image
                       LearnMyFamily(),
-                      "my family", // Module name for TTS
-                    ), // ✅ Added card
+                      "my family",
+                    ),
                   ],
                 ),
               ),
@@ -142,20 +140,22 @@ class _FunctionalAcademicsPageState extends State<FunctionalAcademicsPage> {
     );
   }
 
-  // Generic image card
+  // Generic image card with fixed height and placeholder logic
   Widget _buildImageCard(
     BuildContext context,
     String imagePath,
     Widget destination,
-    String moduleName, // Added parameter for TTS
+    String moduleName,
   ) {
+    const double cardHeight = 200; // ✅ Fixed height for all cards
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
         onTap: () async {
           if (!_isDisposed) {
             try {
-              await _speakIntro(moduleName); // Play TTS before navigation
+              await _speakIntro(moduleName);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => destination),
@@ -167,11 +167,12 @@ class _FunctionalAcademicsPageState extends State<FunctionalAcademicsPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => destination),
-              ); // Proceed with navigation on error
+              );
             }
           }
         },
         child: Container(
+          height: cardHeight,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
@@ -184,16 +185,35 @@ class _FunctionalAcademicsPageState extends State<FunctionalAcademicsPage> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey,
-                  child: const Icon(Icons.error, color: Colors.red),
-                );
-              },
-            ),
+            child: imagePath.isNotEmpty
+                ? Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: cardHeight,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: cardHeight,
+                        color: Colors.grey[300],
+                        child: const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                          size: 50,
+                        ),
+                      );
+                    },
+                  )
+                : Container(
+                    height: cardHeight,
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Icon(
+                        Icons.family_restroom, // Placeholder icon
+                        size: 60,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
           ),
         ),
       ),

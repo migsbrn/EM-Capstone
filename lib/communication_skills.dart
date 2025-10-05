@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'PictureStoryReading.dart'; // Make sure this file exists
-import 'SoftLoudSoundsPage.dart'; // Make sure this file exists
-import 'texttospeech.dart'; // ✅ Import your TTS + STT file
+import 'PictureStoryReading.dart';
+import 'SoftLoudSoundsPage.dart';
+import 'texttospeech.dart'; // TTS + STT file
 
-class CommunicationSkillsPage extends StatelessWidget {
+class CommunicationSkillsPage extends StatefulWidget {
   const CommunicationSkillsPage({super.key});
 
+  @override
+  _CommunicationSkillsPageState createState() =>
+      _CommunicationSkillsPageState();
+}
+
+class _CommunicationSkillsPageState extends State<CommunicationSkillsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,19 +70,19 @@ class CommunicationSkillsPage extends StatelessWidget {
                       context,
                       'assets/story.png',
                       PictureStoryReading(),
-                      '',
+                      "Picture Story Reading",
                     ),
                     _buildImageCard(
                       context,
                       'assets/Sounds.webp',
                       SoftLoudSoundsPage(),
-                      '',
+                      "Soft & Loud Sounds",
                     ),
                     _buildImageCard(
                       context,
-                      'assets/mic.png', // ✅ Add a mic icon/image for TTS-STT
+                      '', // No cover yet
                       const LearningMaterialsPage(),
-                      '',
+                      "Text-to-Speech / STT",
                     ),
                   ],
                 ),
@@ -88,56 +94,53 @@ class CommunicationSkillsPage extends StatelessWidget {
     );
   }
 
-  // Image card builder
   Widget _buildImageCard(
-    BuildContext context,
-    String imagePath,
-    Widget destination,
-    String labelText,
-  ) {
+      BuildContext context, String imagePath, Widget destination, String moduleName) {
+    const double cardHeight = 160;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => destination),
-                ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 10,
-                    offset: const Offset(0, 6),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => destination),
+          );
+        },
+        child: Container(
+          height: cardHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: imagePath.isNotEmpty
+                ? Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: cardHeight,
+                  )
+                : Container(
+                    height: cardHeight,
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Icon(
+                        Icons.mic, // placeholder icon for TTS/STT
+                        size: 60,
+                        color: Colors.blue,
+                      ),
+                    ),
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  height: 160,
-                  width: double.infinity,
-                ),
-              ),
-            ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            labelText,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF4A4E69),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -27,13 +27,10 @@ class _ColorAssessmentState extends State<ColorAssessment>
 
   final FlutterTts flutterTts = FlutterTts();
 
-  // reflection list for summary
   final List<Map<String, String>> reflection = [];
 
-  // shake controller for wrong answers
   late final AnimationController _shakeController;
 
-  // ✅ Tig-3 choices lang bawat question
   final List<Question> questions = [
     Question(
       imagePath: 'assets/shoes.png',
@@ -124,7 +121,7 @@ class _ColorAssessmentState extends State<ColorAssessment>
       questionRead = false;
     });
     await flutterTts.stop();
-    await flutterTts.speak(question.questionText);
+    flutterTts.speak(question.questionText);
     setState(() {
       isSpeaking = false;
       questionRead = true;
@@ -133,7 +130,7 @@ class _ColorAssessmentState extends State<ColorAssessment>
 
   Future<void> _speakOption(String option) async {
     await flutterTts.stop();
-    await flutterTts.speak(option);
+    flutterTts.speak(option);
   }
 
   Future<void> playSoundAndCheck(String selectedColor) async {
@@ -141,42 +138,42 @@ class _ColorAssessmentState extends State<ColorAssessment>
       setState(() {
         isSpeaking = true;
         questionRead = false;
-        selectedOption = selectedColor;
+        this.selectedOption = selectedColor;
         showAnswerFeedback = true;
       });
 
       final currentQuestion = questions[currentIndex];
       final bool isCorrect = selectedColor == currentQuestion.correctAnswer;
 
-      // save to reflection (for summary)
       reflection.add({
         "question": currentQuestion.questionText,
         "userAnswer": selectedColor,
         "correctAnswer": currentQuestion.correctAnswer,
       });
 
-      await flutterTts.speak(selectedColor);
-      await Future.delayed(const Duration(milliseconds: 650));
+      flutterTts.stop();
+      flutterTts.speak(selectedColor);
 
-      if (isCorrect) {
-        await flutterTts.speak("Correct!");
-        score++;
-      } else {
-        await flutterTts.speak(
-            "Wrong! The correct color is ${currentQuestion.correctAnswer}");
-        // trigger shake animation
-        _shakeController.forward(from: 0.0);
-      }
-
-      // wait a bit then go next
-      await Future.delayed(const Duration(milliseconds: 1200));
-      if (!mounted) return;
-      setState(() {
-        isSpeaking = false;
-        selectedOption = null;
-        showAnswerFeedback = false;
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (isCorrect) {
+          flutterTts.speak("Correct!");
+          score++;
+        } else {
+          flutterTts.speak(
+              "Wrong! The correct color is ${currentQuestion.correctAnswer}");
+          _shakeController.forward(from: 0.0);
+        }
       });
-      goToNext();
+
+      Future.delayed(const Duration(milliseconds: 1200), () {
+        if (!mounted) return;
+        setState(() {
+          isSpeaking = false;
+          selectedOption = null;
+          showAnswerFeedback = false;
+        });
+        goToNext();
+      });
     }
   }
 
@@ -212,106 +209,100 @@ class _ColorAssessmentState extends State<ColorAssessment>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: const Color(0xFFFFF6DC),
         child: Padding(
-          padding: const EdgeInsets.all(22),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.star_rounded, size: 60, color: Color(0xFF5DB2FF)),
-              const SizedBox(height: 12),
-              const Text(
-                "Great Job!",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF22223B),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                "Your score: $score / ${questions.length}",
-                style: const TextStyle(fontSize: 20, color: Color(0xFF4A4E69)),
-              ),
-              const SizedBox(height: 14),
-              const Text(
-                "Answer Summary",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF22223B),
-                ),
-              ),
-              const SizedBox(height: 10),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 260),
-                child: reflection.isEmpty
-                    ? const Text("No answers recorded.")
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: reflection.length,
-                        itemBuilder: (_, index) {
-                          final item = reflection[index];
-                          final isCorrect =
-                              item['userAnswer'] == item['correctAnswer'];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor:
-                                  isCorrect ? Colors.green : Colors.red,
-                              child: Icon(
-                                isCorrect ? Icons.check : Icons.close,
-                                color: Colors.white,
-                              ),
-                            ),
-                            title: Text(
-                              "Q${index + 1}: ${item['question']}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Your Answer: ${item['userAnswer']}"),
-                                if (!isCorrect)
-                                  Text(
-                                    "Correct Answer: ${item['correctAnswer']}",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green),
-                                  ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-              ),
-              const SizedBox(height: 18),
-              Row(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 500, maxWidth: 400),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        resetAssessment();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4A4E69),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      child: const Text(
-                        "Reset",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                  const Icon(Icons.star_rounded, size: 60, color: Color(0xFF5DB2FF)),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Great Job!",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF22223B),
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
+                  const SizedBox(height: 8),
+                  Text(
+                    "Your score: $score / ${questions.length}",
+                    style: const TextStyle(fontSize: 22, color: Color(0xFF4A4E69)),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Answer Summary",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF22223B),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: reflection.length,
+                    itemBuilder: (_, index) {
+                      final item = reflection[index];
+                      final isCorrect = item['userAnswer'] == item['correctAnswer'];
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        color: isCorrect
+                            ? const Color(0xFFD6FFE0)
+                            : const Color(0xFFFFD6D6),
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: isCorrect ? Colors.green : Colors.red,
+                            child: Text(
+                              "${index + 1}",
+                              style: const TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          title: Text(
+                            item['question']!,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Your Answer: ${item['userAnswer']}",
+                                style: TextStyle(
+                                    color: isCorrect ? Colors.green[800] : Colors.red[800]),
+                              ),
+                              if (!isCorrect)
+                                Text(
+                                  "Correct Answer: ${item['correctAnswer']}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold, color: Colors.green),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 70,
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5DB2FF),
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
+                      ),
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -319,26 +310,18 @@ class _ColorAssessmentState extends State<ColorAssessment>
                           (Route<dynamic> route) => false,
                         );
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5DB2FF),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
                       child: const Text(
                         "Back to Learning",
                         style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
